@@ -17,10 +17,18 @@ const Header = title => {
 const Content = ({courses}) => {
   return (
     <ol>
-      {courses.map(course => {
-        return <li key={course.courseId}>{course.partName}: {course.exercises}</li>
+      {courses.map((course, i) => {
+        return <Part key={i} part={course}/>
       })}
     </ol>
+  )
+}
+
+const Part = ({part}) => {
+  return (
+    <li>
+      {part.partName}: {part.exercises}
+    </li>
   )
 }
 
