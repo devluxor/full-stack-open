@@ -50,7 +50,7 @@ const App = () => {
           bad: bad,
           all: totalClicks(),
           average: averageScoreClicks(),
-          positivePercentage: positivePercentageClicks(),
+          positive: positivePercentageClicks(),
         }}
       />
     </div>
@@ -68,7 +68,7 @@ const Statistics = ({data}) => {
     <table>
       <tbody>
         {Object.keys(data).map((k, i) => {
-          const value = /percentage/i.test(k) ? `${data[k]} %` : data[k]
+          const value = /positive/i.test(k) ? `${data[k]} %` : data[k]
           return <StatisticLine key={i} text={k} value={value}/>
         })}
       </tbody>
