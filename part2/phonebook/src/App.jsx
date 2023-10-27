@@ -12,10 +12,19 @@ const App = () => {
   const addNewContact = (event) => {
     event.preventDefault()
     if (newName.trim() === '') return
+    else if (contactInList()) {
+      alert(`${newName} is already in the list`)
+      setNewName('')
+      return
+    }
 
     const newContact = { id: persons.length + 1, name: newName }
     setPersons(persons.concat(newContact))
     setNewName('')
+  }
+
+  const contactInList = () => {
+    return persons.find(person => person.name === newName)
   }
 
   return (
