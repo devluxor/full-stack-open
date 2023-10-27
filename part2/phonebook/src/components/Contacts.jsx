@@ -1,13 +1,15 @@
 const ContactList = ({contacts}) => {
   return (
-    contacts.map(contact => {
-      return <Contact key={contact.name} contactName={contact.name} />
-    })
+    <ul>
+      {contacts.map((contact) => {
+        return <Contact key={contact.id} contactName={contact.name} />
+      })}
+    </ul>
   )
 }
 
 const Contact = ({contactName}) => {
-  return <p>{contactName}</p>
+  return <li>{contactName}</li>
 }
 
 export default ContactList
