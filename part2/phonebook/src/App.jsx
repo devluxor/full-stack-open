@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import ContactList from './components/Contacts'
 import AddContactForm from './components/Forms'
+import { SearchInput } from './components/Inputs'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -18,11 +19,12 @@ const App = () => {
 
   const contactsToShow = showAll 
     ? persons 
-    : persons.filter(person => (new RegExp(`${searchString}`, 'iu')).test(person.name))
+    : persons.filter(person => (new RegExp(`${searchString.trim()}`, 'iu')).test(person.name))
 
   const addNewContact = (event) => {
+    const newName = newName.trim()
     event.preventDefault()
-    if (newName.trim() === '') return
+    if (newName === '') return
     else if (contactInList()) {
       alert(`${newName} is already in the list`)
       resetInputs()
@@ -35,7 +37,7 @@ const App = () => {
   }
 
   const contactInList = () => {
-    return persons.find(person => person.name === newName)
+    return persons.find(person => person.name.trim() === newName.trim())
   }
 
   const resetInputs = () => {
@@ -68,21 +70,6 @@ const App = () => {
 
 const Header = ({text}) => {
   return <h2>{text}</h2>
-}
-
-const SearchInput = ({setShowAll, setSearchString}) => {
-  const handleSearch = (e) => {
-    const searchString = e.target.value
-    setSearchString(searchString)
-    setShowAll(searchString.trim() === '') 
-  }
-
-  return (
-    <input
-      placeholder='Search by name...'
-      onChange={handleSearch}
-    ></input>
-  )
 }
 
 export default App

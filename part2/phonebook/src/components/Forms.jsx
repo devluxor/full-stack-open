@@ -1,3 +1,5 @@
+import { Input } from './Inputs'
+
 const AddContactForm = ({
   newContact, 
   setNewName, 
@@ -27,17 +29,17 @@ const AddContactForm = ({
   )
 }
 
-const Input = ({text, value, placeholder, handler}) => {
-  return (
-    <div>
-    {text} 
-    <input
-      value={value}
-      placeholder={placeholder}
-      onChange={(e) => handler(e.target.value)} // updates var in comp. state dynamically
-    ></input> 
-  </div>
-  )
-}
+// const Input = ({text, value, placeholder, handler}) => {
+//   return (
+//     <div>
+//     {text} 
+//     <input
+//       value={value}
+//       placeholder={placeholder}
+//       onChange={(e) => handler(e.target.value)} // updates var in comp. state dynamically
+//     ></input> 
+//   </div>
+//   )
+// }
 
 export default AddContactForm
