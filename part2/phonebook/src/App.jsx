@@ -47,7 +47,7 @@ const App = () => {
       .then(response => {
         setPersons(persons.concat(response))
         resetInputs()
-        showNotification('Added', {name})
+        showNotification('Added', name)
       })
       .catch(error => {
         console.log(error)
@@ -75,14 +75,20 @@ const App = () => {
       .then(() => {
         setPersons(persons.map(p => p.id === contact.id ? newData : p))
         resetInputs()
-        showNotification('Updated', {name: contact.name})
+        showNotification('Updated', contact.name)
+      })
+      .catch(() => {
+        setPersons(persons.filter(p => p.id !== contact.id))
+        resetInputs()
+        showNotification('error', contact.name) 
       })
   }
 
-  const showNotification = (type, content={}) => {
-    console.log(type, content)
-    const message = `${type} ${content.name}`
-    setNotification(message)
+  const showNotification = (type, name) => {
+    const message = type === 'error' 
+      ? `Information of ${name} has already been removed from server`
+      : `${type} ${name}`
+    setNotification({message, type})
     setTimeout(() => setNotification(null), 4000)
   }
 
@@ -94,7 +100,7 @@ const App = () => {
   return (
     <>
       <Header text='Phonebook' />
-      <Notification message={notification}/>
+      <Notification notification={notification}/>
       <SearchInput
         setSearchString={setSearchString}     
         setShowAll={setShowAll}     
@@ -122,12 +128,12 @@ const Header = ({text}) => {
   return <h1>{text}</h1>
 }
 
-const Notification = ({message}) => {
-  if (!message) return
+const Notification = ({notification}) => {
+  if (!notification) return
 
   return (
-    <div className='notification'>
-      {message}
+    <div className={notification.type === 'error' ? 'error' : 'notification'}>
+      {notification.message}
     </div>
   )
 }
