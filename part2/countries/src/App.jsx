@@ -1,50 +1,39 @@
 import { useState, useEffect } from 'react'
 
 import countryServices from './services/countries'
+import SearchResults from './components/results' 
 
 function App() {
-  const [searchString, setSearchString] = useState('')
-  const [countries, setCountries] = useState(null)
+  const [allCountries, setCountries] = useState(null)
+  const [searchResult, setSearchResult] = useState(null)
 
-  
-
-  /*
-    set initial state of countries to null
-    fetch countries from server
-    save data in countries
-  */
-
-  /*
-    user enters chars in input
-    onchange handler dynamically sets searchString
-                     look for countries with that name
-                     find all countries that include searchString
-                        if more than 10 : too many matches
-                        if 1 < x <= 10 : show list of countries
-                        if 1 : show country details
-
-  */
+  useEffect(() => {
+    countryServices
+      .getAll()
+      .then(countryList => setCountries(countryList) )
+      .catch(e => console.log(e))
+  }, [])
 
   const handleSearchString = e => {
-    const inputString = e.target.value
-    if (inputString === '') return
+    const inputString = e.target.value.trim()
+    if (!allCountries) return
 
-    setSearchString(inputString)
-    console.log(searchString)
+    findCountries(inputString)
   }
 
-  const getAllCountries = () => {
-    countryServices
-      .then(countries => setCountries(countries))
-      .catch(error => console.log(error))
+  const findCountries = string => {
+    const nameRegexp = new RegExp(`${string}`, 'i')
+    const results = allCountries.filter(country => nameRegexp.test(country.name.common))    
+    setSearchResult(results)
   }
-
 
   return (
     <>
-      <SearchInput
-        handleSearchString={handleSearchString}
-      ></SearchInput>
+      <SearchInput handleSearchString={handleSearchString} />
+      <SearchResults
+        allCountries={allCountries}
+        countriesList={searchResult}
+      />
     </>
   )
 }
@@ -55,27 +44,11 @@ const SearchInput = ({handleSearchString}) => {
       find countries
       <input 
         type='text'
-        placeholder='Enter country...'    
+        placeholder='Enter country name...'    
         onChange={e => handleSearchString(e)}  
       ></input>
     </div>
   )
-}
-
-const CountryList = () => {
-
-}
-
-const Country = () => {
-
-}
-
-const Capital = () => {
-
-}
-
-const Languages = () => {
-
 }
 
 export default App
