@@ -23,19 +23,26 @@ const App = () => {
     ? persons 
     : persons.filter(person => (new RegExp(`${searchString.trim()}`, 'iu')).test(person.name))
 
-  const addNewContact = event => {
-    const name = newName.trim()
+  const handleAddContact = event => {
     event.preventDefault()
+
+    const name = newName.trim()
+    const number = newNumber.trim()
     if (name === '') return
-    else if (contactInList()) {
+
+    const existingContact = persons.find(p => p.name === name)
+    if (!existingContact) addNewContact(name, number)
+    else if (existingContact.number !== newNumber) {
+      updateContact(existingContact, newNumber)
+    } else if (existingContact.number === newNumber) {
       alert(`${newName} is already in the list`)
       resetInputs()
-      return
     }
+  }
 
-    const newContact = { name, number: newNumber, }
+  const addNewContact = (name, number) => {
     contactService
-      .create(newContact)
+      .create({ name, number })
       .then(response => {
         setPersons(persons.concat(response))
         resetInputs()
@@ -45,9 +52,30 @@ const App = () => {
       })
   }
 
-  const contactInList = () => {
-    return persons.find(person => person.name.trim() === newName.trim())
+  const deleteContact = id => {
+    const name = persons.find(p => p.id === id)?.name
+    if (!window.confirm(`Delete ${name}?`) || !name) return
+    
+    contactService
+      .deleteEntry(id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== id))
+      })
   }
+
+  const updateContact = (contact, newNumber) => {
+    const stringPrompt = 'is already added to the phonebook, replace the old number with a new one?'
+    if (!window.confirm(`${contact.name} ${stringPrompt}`)) return
+
+    const newData = {...contact, number: newNumber}
+    contactService
+      .update(contact.id, newData)
+      .then(() => {
+        setPersons(persons.map(p => p.id === contact.id ? newData : p))
+        resetInputs()
+      })
+  }
+
 
   const resetInputs = () => {
     setNewName('')
@@ -64,7 +92,7 @@ const App = () => {
 
       <Header text='Add a new contact' />
       <AddContactForm  
-        newContact={addNewContact} 
+        newContact={handleAddContact} 
         setNewName={setNewName} 
         setNewNumber={setNewNumber} 
         newName={newName}
@@ -72,7 +100,10 @@ const App = () => {
       />
 
       <Header text='Numbers' />
-      <ContactList contacts={contactsToShow} />
+      <ContactList 
+        contacts={contactsToShow} 
+        deleteContact={deleteContact}
+      />
     </>
   )
 }

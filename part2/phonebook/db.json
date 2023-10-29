@@ -22,18 +22,8 @@
     },
     {
       "name": "Luke",
-      "number": "39-23-4234234",
+      "number": "123",
       "id": 5
-    },
-    {
-      "name": "Nebraska",
-      "number": "123321321",
-      "id": 6
-    },
-    {
-      "name": "Aloha",
-      "number": "Guapitos",
-      "id": 7
     }
   ]
 }
