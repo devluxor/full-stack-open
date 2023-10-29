@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import contactService from './services/contacts'
 
 import ContactList from './components/Contacts'
 import AddContactForm from './components/Forms'
@@ -9,9 +9,9 @@ const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    contactService
+      .getAll()
+      .then(contacts => setPersons(contacts))
   }, [])
 
   const [newName, setNewName] = useState('')
@@ -23,19 +23,26 @@ const App = () => {
     ? persons 
     : persons.filter(person => (new RegExp(`${searchString.trim()}`, 'iu')).test(person.name))
 
-  const addNewContact = (event) => {
-    const newName = newName.trim()
+  const addNewContact = event => {
+    const name = newName.trim()
     event.preventDefault()
-    if (newName === '') return
+    if (name === '') return
     else if (contactInList()) {
       alert(`${newName} is already in the list`)
       resetInputs()
       return
     }
 
-    const newContact = { id: persons.length + 1, name: newName, number: newNumber, }
-    setPersons(persons.concat(newContact))
-    resetInputs()
+    const newContact = { name, number: newNumber, }
+    contactService
+      .create(newContact)
+      .then(response => {
+        setPersons(persons.concat(response))
+        resetInputs()
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   const contactInList = () => {
@@ -56,14 +63,14 @@ const App = () => {
       />
 
       <Header text='Add a new contact' />
-
       <AddContactForm  
         newContact={addNewContact} 
         setNewName={setNewName} 
         setNewNumber={setNewNumber} 
         newName={newName}
         newNumber={newNumber}
-        />
+      />
+
       <Header text='Numbers' />
       <ContactList contacts={contactsToShow} />
     </>
