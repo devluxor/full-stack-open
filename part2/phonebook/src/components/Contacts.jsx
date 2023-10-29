@@ -16,7 +16,7 @@ const ContactList = ({contacts, deleteContact}) => {
 
 const Contact = ({contact, deleteContact}) => {
   return (
-    <li>
+    <li className="contact">
       {contact.name} {contact.number} 
       <button
         onClick={() => deleteContact(contact.id)}

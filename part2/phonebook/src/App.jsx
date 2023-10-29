@@ -18,6 +18,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [searchString, setSearchString] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const contactsToShow = showAll 
     ? persons 
@@ -46,6 +47,7 @@ const App = () => {
       .then(response => {
         setPersons(persons.concat(response))
         resetInputs()
+        showNotification('Added', {name})
       })
       .catch(error => {
         console.log(error)
@@ -73,9 +75,16 @@ const App = () => {
       .then(() => {
         setPersons(persons.map(p => p.id === contact.id ? newData : p))
         resetInputs()
+        showNotification('Updated', {name: contact.name})
       })
   }
 
+  const showNotification = (type, content={}) => {
+    console.log(type, content)
+    const message = `${type} ${content.name}`
+    setNotification(message)
+    setTimeout(() => setNotification(null), 4000)
+  }
 
   const resetInputs = () => {
     setNewName('')
@@ -85,6 +94,7 @@ const App = () => {
   return (
     <>
       <Header text='Phonebook' />
+      <Notification message={notification}/>
       <SearchInput
         setSearchString={setSearchString}     
         setShowAll={setShowAll}     
@@ -109,7 +119,17 @@ const App = () => {
 }
 
 const Header = ({text}) => {
-  return <h2>{text}</h2>
+  return <h1>{text}</h1>
+}
+
+const Notification = ({message}) => {
+  if (!message) return
+
+  return (
+    <div className='notification'>
+      {message}
+    </div>
+  )
 }
 
 export default App
