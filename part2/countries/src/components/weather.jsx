@@ -5,14 +5,20 @@ const WeatherReport = ({city}) => {
   const [report, setReport] = useState(null)
 
   useEffect(() => {
-    (async () => {
+    let ignore = false
+
+    const loadReport = async () => {
       try {
         const report = await fullReport(city)
-        setReport(report)
+        if (!ignore) setReport(report)
       } catch (e) {
         console.log(e)
       }
-    })()
+    }
+
+    loadReport()
+
+    return () => ignore = true
   }, [city]) 
 
   if (!report) return 
