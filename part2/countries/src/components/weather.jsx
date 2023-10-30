@@ -4,11 +4,6 @@ import fullReport from '../services/openweather'
 const WeatherReport = ({city}) => {
   const [report, setReport] = useState(null)
 
-  const toCelsius = (temperature) => {
-    const kelvinFactor = 273.15
-    return (temperature - kelvinFactor).toFixed(2)
-  }
-
   useEffect(() => {
     (async () => {
       try {
@@ -24,7 +19,7 @@ const WeatherReport = ({city}) => {
 
   return (
     <>
-      <p>Temperature: {toCelsius(report.main.temp)} Celsius</p>
+      <p>Temperature: {report.main.temp} Celsius</p>
       <img 
         src={`https://openweathermap.org/img/wn/${report.weather[0].icon}@2x.png`}
         alt={`${report.weather[0].description}`}
