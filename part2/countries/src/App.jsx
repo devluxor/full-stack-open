@@ -16,7 +16,10 @@ function App() {
 
   const handleSearchString = e => {
     const inputString = e.target.value.trim()
-    if (!allCountries) return
+    if (inputString === '') {
+      setSearchResult([])
+      return
+    }
 
     findCountries(inputString)
   }
@@ -27,12 +30,19 @@ function App() {
     setSearchResult(results)
   }
 
+  const showCountry = name => {
+    setSearchResult([searchResult.find(country => country.name.common === name)])
+  }
+
+  if (!allCountries) return
+
   return (
     <>
       <SearchInput handleSearchString={handleSearchString} />
       <SearchResults
         allCountries={allCountries}
         countriesList={searchResult}
+        showCountry={showCountry}
       />
     </>
   )

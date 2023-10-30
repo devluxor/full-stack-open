@@ -1,4 +1,6 @@
-const SearchResults = ({countriesList, allCountries}) => {
+import WeatherReport from "./weather"
+
+const SearchResults = ({countriesList, allCountries, showCountry}) => {
   if (!countriesList) return
   
   const listLength = countriesList.length
@@ -6,25 +8,32 @@ const SearchResults = ({countriesList, allCountries}) => {
   
   if (listLength > 10) return <p>Too many matches, specify another filter</p>
   else if (listLength === 1) return <Country country={countriesList[0]} />
-  else return <CountrySearchList list={countriesList}/>
+  else return <CountrySearchList list={countriesList} showCountry={showCountry}/>
 }
 
-const CountrySearchList = ({list}) => {
+const CountrySearchList = ({list, showCountry}) => {
   return (
     <ul>
       {list.map(country => {
-        return <li key={country.name.common}>{country.name.common}</li>
+        const name = country.name.common
+        return (
+          <li key={name}>
+            {name}
+            <button onClick={() => showCountry(name)}>Show</button>
+          </li>
+        )
       })}
     </ul>
   )
 }
 
 const Country = ({country}) => {
+  const capital = country.capital[0]
   return (
     <div>
       <h1>{country.name.common}</h1>
       <ul>
-        <li>Capital: {country.capital[0]}</li>
+        <li>Capital: {capital}</li>
         <li>Area: {country.area}</li>
       </ul>
       <h2>Languages:</h2>
@@ -37,6 +46,8 @@ const Country = ({country}) => {
         src={country.flags.png} 
         alt={`${country.demonyms.eng.m} flag`}
       ></img>
+      <h2>Weather in {capital}</h2>
+      <WeatherReport city={capital}/>
     </div>
   )
 }
