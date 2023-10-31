@@ -50,8 +50,14 @@ const App = () => {
         showNotification('Added', name)
       })
       .catch(error => {
-        console.log(error)
+        const errorReport = error.response.data.error
+        const errorType = getErrorType(errorReport)
+        showNotification(errorType, name, errorReport)
       })
+  }
+
+  const getErrorType = report => {
+    return report?.match(/validation/i) ? 'validation error' : 'error'
   }
 
   const deleteContact = id => {
@@ -77,17 +83,21 @@ const App = () => {
         resetInputs()
         showNotification('Updated', contact.name)
       })
-      .catch(() => {
-        setPersons(persons.filter(p => p.id !== contact.id))
-        resetInputs()
-        showNotification('error', contact.name) 
+      .catch(error => {
+        const errorReport = error.response.data.error
+        const errorType = getErrorType(errorReport)
+        showNotification(errorType, contact.name, errorReport)
       })
   }
 
-  const showNotification = (type, name) => {
-    const message = type === 'error' 
+  const showNotification = (type, name, report) => {
+    let message = type === 'error' 
       ? `Information of ${name} has already been removed from server`
       : `${type} ${name}`
+    if (type === 'validation error') message = report
+    else if (type === 'error') message = `Information of ${name} has already been removed from server`
+    else message = `${type} ${name}`
+
     setNotification({message, type})
     setTimeout(() => setNotification(null), 4000)
   }
@@ -132,7 +142,7 @@ const Notification = ({notification}) => {
   if (!notification) return
 
   return (
-    <div className={notification.type === 'error' ? 'error' : 'notification'}>
+    <div className={notification.type.includes('error') ? 'error' : 'notification'}>
       {notification.message}
     </div>
   )
