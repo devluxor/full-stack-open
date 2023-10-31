@@ -1,5 +1,4 @@
 node_modules/
 practice/
-practice/*
 __*/
 .env
