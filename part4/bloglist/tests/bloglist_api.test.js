@@ -109,6 +109,23 @@ test('a blog is deleted', async () => {
   expect(afterDeletion).toHaveLength(helper.initialBlogs.length - 1)
 })
 
+// updated number of likes
+test('a blog number of likes is updated', async () => {
+  let blogs = await helper.blogsInDb()
+  const toUpdateBlog = blogs[0]
+  const blogId = toUpdateBlog.id
+  const newLikes = toUpdateBlog.likes + 1
+
+  await api
+    .put(`/api/blogs/${blogId}`)
+    .send({ likes: newLikes })
+    .expect(200)
+
+  blogs = await helper.blogsInDb()
+  const updatedBlog = blogs.find(b => b.id === blogId)
+  expect(updatedBlog.id).toBe(blogId)
+  expect(updatedBlog.likes).toBe(newLikes)
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
