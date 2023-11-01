@@ -247,3 +247,5 @@ The returned values of each promise in the array can still be accessed when usin
 Promise.all executes the promises it receives in parallel. If the promises need to be executed in a particular order, this will be problematic. In situations like this, the operations can be executed inside of a for...of block, that guarantees a specific execution order.
 
 NB: the material uses the `toContain` matcher in several places to verify that an array contains a specific element. It's worth noting that the method uses the `===` operator for comparing and matching elements, which means that it is often not well-suited for matching objects. In most cases, the appropriate method for verifying objects in arrays is the `toContainEqual` matcher.
+
+NB: when you are writing your tests it is better to not execute all of your tests, only execute the ones you are working on. Read more about this here.
