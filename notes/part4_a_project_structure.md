@@ -30,7 +30,9 @@ The database is based on MongoDB (non-relational); we interact with it via Mongo
 ├── utils
 │   ├── config.js
 │   ├── logger.js
-│   └── middleware.js  
+│   └── middleware.js
+├── tests  
+│   └── ...
 ```
 
 There are other important files that should be also considered for the basic structure of the, and are usually present as well in the root folder of any Node.js application, for example:

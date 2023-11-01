@@ -179,5 +179,19 @@ JavaScripts basics (special attention to pseudo-classes, constructors, etc.)
 - Testing Node applications
 
 ### b: Testing the backend
+
+Test environment
+supertest
+Initializing the database before tests
+Running tests one by one
+async/await
+async/await in the backend
+More tests and refactoring the backend
+Error handling and async/await
+Eliminating the try-catch
+Optimizing the beforeEach function
+A true full stack developer's oath
+Refactoring tests
+
 ### c: User administration
 ### d: Token authentication
