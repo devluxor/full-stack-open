@@ -30,13 +30,10 @@ test('all blogs have a unique id', async () => {
   expect(blogs[0].id).not.toMatch(blogs[1].id)
 })
 
-// making an HTTP POST request to the /api/blogs URL successfully creates a new blog post. 
-// At the very least, verify that the total number of blogs in the system is increased by one. 
-// You can also verify that the content of the blog post is saved correctly to the database.
+
 test('a valid blog is created', async () => {
-  const testTitle = 'TESTBLOG-3'
   const newBlog =   {
-    title: testTitle,
+    title: 'TESTBLOG-3',
     author: 'TEST AUTOR 3',
     url: 'URL',
     likes: 1
@@ -52,7 +49,50 @@ test('a valid blog is created', async () => {
   expect(afterBlogs).toHaveLength(helper.initialBlogs.length + 1)
 
   const contents = afterBlogs.map(b => b.title)
-  expect(contents).toContain(testTitle)
+  expect(contents).toContain(newBlog.title)
+})
+
+test('likes property defaults to 0', async () => {
+  const newBlog = {
+    title: 'TESTBLOG-3',
+    author: 'TEST AUTOR 3',
+    url: 'URL'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const results = await Blog.find({title: newBlog.title})
+  expect(results[0].likes).toBe(0)
+})
+
+test('new blog is not added if title is missing', async () => {
+  const newBlog = {
+    author: 'TEST AUTOR 3',
+    url: 'URL',
+    likes: 1
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('new blog is not added if url is missing', async () => {
+  const newBlog = {
+    title: 'TESTBLOG-3',
+    author: 'TEST AUTOR 3',
+    likes: 1
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 
