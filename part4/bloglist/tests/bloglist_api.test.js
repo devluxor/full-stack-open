@@ -95,6 +95,20 @@ test('new blog is not added if url is missing', async () => {
     .expect(400)
 })
 
+test('a blog is deleted', async () => {
+  const blogs = await helper.blogsInDb()
+  const id = blogs[0].id
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .send()
+    .expect(204)
+
+  const afterDeletion = await helper.blogsInDb()
+
+  expect(afterDeletion).toHaveLength(helper.initialBlogs.length - 1)
+})
+
 
 afterAll(async () => {
   await mongoose.connection.close()

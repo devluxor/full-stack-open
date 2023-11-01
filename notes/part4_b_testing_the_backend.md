@@ -249,3 +249,31 @@ Promise.all executes the promises it receives in parallel. If the promises need 
 NB: the material uses the `toContain` matcher in several places to verify that an array contains a specific element. It's worth noting that the method uses the `===` operator for comparing and matching elements, which means that it is often not well-suited for matching objects. In most cases, the appropriate method for verifying objects in arrays is the `toContainEqual` matcher.
 
 NB: when you are writing your tests it is better to not execute all of your tests, only execute the ones you are working on. Read more about this here.
+
+Refactoring tests
+
+Our test coverage is currently lacking. Some requests like GET /api/notes/:id and DELETE /api/notes/:id aren't tested when the request is sent with an invalid id. The grouping and organization of tests could also use some improvement, as all tests exist on the same "top level" in the test file. The readability of the test would improve if we group related tests with describe blocks.
+
+The test output is grouped according to the `describe` blocks:
+
+
+There is still room for improvement, but it is time to move forward.
+
+```bash
+ PASS  tests/note_api.test.js
+  when there is initially some notes saved
+    ✓ notes are returned as json (1300 ms)
+    ✓ all notes are returned (152 ms)
+    ✓ a specific note is within the returned notes (157 ms)
+  viewing a specific note
+    ✓ succeeds with a valid id (160 ms)
+    ✓ fails with statuscode 404 if note does not exist (216 ms)
+    ✓ fails with statuscode 400 if id is invalid (94 ms)
+  addition of a new note
+    ✓ succeeds with valid data (176 ms)
+    ✓ fails with status code 400 if data invalid (124 ms)
+  deletion of a note
+    ✓ succeeds with status code 204 if id is valid (211 ms)
+```
+
+This way of testing the API, by making HTTP requests and inspecting the database with Mongoose, is by no means the only nor the best way of conducting API-level integration tests for server applications. There is no universal best way of writing tests, as it all depends on the application being tested and available resources.
