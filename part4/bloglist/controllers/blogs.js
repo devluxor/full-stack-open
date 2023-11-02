@@ -1,22 +1,17 @@
-const bloglistRouter = require('express').Router()
+const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-const { tokenExtractor } = require('../utils/middleware')
+const middleware = require('../utils/middleware');
 
-bloglistRouter.get('/', async (request, response) => {
+blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
   response.json(blogs)
 })
 
-bloglistRouter.post('/', async (request, response) => {
+blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const user = request.user
   
   const blog = new Blog({
     title: body.title,
@@ -33,7 +28,7 @@ bloglistRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-bloglistRouter.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', async (request, response) => {
   const blog = { likes: request.body.likes }
   
   const updatedBlog = await Blog.findByIdAndUpdate(
@@ -45,16 +40,11 @@ bloglistRouter.put('/:id', async (request, response) => {
   response.status(200).json(updatedBlog)
 })
 
-bloglistRouter.delete('/:id', async(request, response) => {
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const parameterId = request.params.id
   const blog = await Blog.findById(parameterId)
 
-  const currentUserId = jwt.verify(request.token, process.env.SECRET).id
-  if (!currentUserId) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-
-  if (blog.user.toString() !== currentUserId) {
+  if (blog.user.toString() !== request.user.id) {
     return response.status(401).json({ error: 'unauthorized user'})
   }
   
@@ -62,4 +52,4 @@ bloglistRouter.delete('/:id', async(request, response) => {
   response.status(204).end()
 })
 
-module.exports = bloglistRouter
+module.exports = blogsRouter

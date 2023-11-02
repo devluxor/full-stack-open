@@ -94,3 +94,26 @@ The negative aspect of server-side sessions is the increased complexity in the b
 When server-side sessions are used, the token is quite often just a random string, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database. It is also quite usual that instead of using Authorization-header, cookies are used as the mechanism for transferring the token between the client and the server.
 
 Usernames, passwords and applications using token authentication must always be used over HTTPS. We could use a Node HTTPS server in our application instead of the HTTP server (it requires more configuration). On the other hand, the production version of our application is in Fly.io, so our application stays secure: Fly.io routes all traffic between a browser and the Fly.io server over HTTPS.
+
+for repeated operations in routes, like checking if current user is authorized to delete a note:
+
+```js
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
+  const parameterId = request.params.id
+  const blog = await Blog.findById(parameterId)
+
+  // here
+  const currentUserId = jwt.verify(request.token, process.env.SECRET).id
+  if (!currentUserId) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  if (blog.user.toString() !== request.user.id) {
+    return response.status(401).json({ error: 'unauthorized user'})
+  }
+  
+  await blog.deleteOne()
+  response.status(204).end()
+})
+```
+
