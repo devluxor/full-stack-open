@@ -150,6 +150,10 @@ Running tests one by one
 
 When we are writing tests, it is usually wise to only execute one or two tests
 
+```sh
+npm test -- -t "<test name>"
+```
+
 A better option is to specify the tests that need to be run as parameters of the npm test command.
 
 NB: When running a single test, the mongoose connection might stay open if no tests using the connection are run. The problem might be because supertest primes the connection, but Jest does not run the afterAll portion of the code.

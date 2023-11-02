@@ -162,3 +162,21 @@ We can use the populate parameter for choosing the fields we want to include fro
 It's important to understand that the database does not know that the ids stored in the user field of notes reference documents in the user collection.
 
 The functionality of the populate method of Mongoose is based on the fact that we have defined "types" to the references in the Mongoose schema with the ref option:
+
+```js
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  name: String,
+  passwordHash: String,
+  notes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Note'
+    }
+  ],
+})
+```

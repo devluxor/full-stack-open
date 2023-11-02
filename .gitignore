@@ -1,6 +1,6 @@
 node_modules/
 practice/
 __*/
-.env
-.todo
+*.env
+*.todo
 *.rest
