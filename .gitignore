@@ -3,4 +3,4 @@ practice/
 __*/
 .env
 .todo
-.rest
+*.rest
