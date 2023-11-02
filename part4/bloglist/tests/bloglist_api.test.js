@@ -7,6 +7,18 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const Blog = require('../models/blog')
 
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash(helper.testUserPassword, 10)
+  const user = new User({ 
+    username: helper.testUserName,
+    passwordHash
+  })
+
+  await user.save()
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -32,8 +44,17 @@ test('all blogs have a unique id', async () => {
   expect(blogs[0].id).not.toMatch(blogs[1].id)
 })
 
-
 test('a valid blog is created', async () => {
+  const loginRequest = await api
+    .post('/api/login')
+    .send({
+      username: helper.testUserName,
+      password: helper.testUserPassword
+    })
+    .expect(200)
+
+  const token = loginRequest.body.token
+
   const newBlog =   {
     title: 'TESTBLOG-3',
     author: 'TEST AUTOR 3',
@@ -41,8 +62,9 @@ test('a valid blog is created', async () => {
     likes: 1
   }
 
-  await api
+  const result = await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -52,6 +74,32 @@ test('a valid blog is created', async () => {
 
   const contents = afterBlogs.map(b => b.title)
   expect(contents).toContain(newBlog.title)
+})
+
+test('a blog without a token is not created', async () => {
+  await api
+    .post('/api/login')
+    .send({
+      username: helper.testUserName,
+      password: helper.testUserPassword
+    })
+    .expect(200)
+
+  const newBlog =   {
+    title: 'TESTBLOG-3',
+    author: 'TEST AUTOR 3',
+    url: 'URL',
+    likes: 1
+  }
+
+  const result = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+
+  const afterBlogs = await helper.blogsInDb()
+  expect(afterBlogs).toHaveLength(helper.initialBlogs.length)
 })
 
 test('likes property defaults to 0', async () => {
@@ -224,5 +272,9 @@ describe('when there is initially one user in db', () => {
 })
 
 afterAll(async () => {
+  // delete test user
+  await User.deleteMany({})
+  await Blog.deleteMany({})
+
   await mongoose.connection.close()
 })
