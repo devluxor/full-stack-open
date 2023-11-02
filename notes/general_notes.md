@@ -194,4 +194,11 @@ A true full stack developer's oath
 Refactoring tests
 
 ### c: User administration
+
+References across collections
+Mongoose schema for users
+Creating users
+Creating a new note
+Populate
+
 ### d: Token authentication
