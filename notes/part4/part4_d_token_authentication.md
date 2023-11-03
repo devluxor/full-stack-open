@@ -9,10 +9,27 @@
 - The backend responds with a status code indicating the operation was successful and returns the token with the response.
 - The browser saves the token, for example to the state of a React application.
 - When the user creates a new note (or does some other operation requiring identification), the React code sends the token to the server with the request.
-- The server uses the token to identify the user
+- The server uses the token to identify the user to generate data, authorize user to perform certain operations, etc.
 
 Standards-Based
-When creating the token, you have a few options. We’ll be diving more into this topic when we secure an API in a follow-up article, but the standard to use would be JSON Web Tokens.
+
+When creating the token, you have a few options but the standard to use would be JSON Web Tokens.
+
+JSON Web Tokens (JWT), pronounced “jot”, are a standard since the information they carry is transmitted via JSON. 
+
+JSON Web Tokens work across different programming languages: JWTs work in .NET, Python, Node.js, Java, PHP, Ruby, Go, JavaScript, and Haskell. So you can see that these can be used in many different scenarios.
+
+JWTs are self-contained: They will carry all the information necessary within itself. This means that a JWT will be able to transmit basic information about itself, a payload (usually user information), and a signature.
+
+JWTs can be passed around easily: Since JWTs are self-contained, they are perfectly used inside an HTTP header when authenticating an API. You can also pass it through the URL.
+
+A JWT is easy to identify. It is three strings separated by .
+
+Since there are 3 parts separated by a ., each section is created differently. We have the 3 parts which are:
+
+header
+payload
+signature
 
 Let's first implement the functionality for logging in
 
@@ -24,7 +41,7 @@ client sends post request with that data
 
 backend: The code starts by searching for the user from the database by the username attached to the request.
 
-backend: Next, it checks the password, also attached to the request. (using bcrypt compare) Because the passwords themselves are not saved to the database, but hashes calculated from the passwords, the bcrypt.compare method is used to check if the password is correct:
+backend: Next, it checks the password, also attached to the request. (using bcrypt `compare`) Because the passwords themselves are not saved to the database, but hashes calculated from the passwords, the bcrypt.compare method is used to check if the password is correct:
 
 ```js
 bcrypt.compare(password, user.passwordHash)
@@ -53,7 +70,7 @@ Limiting creating new notes to logged-in users
 
 Let's change creating new notes so that it is only possible if the post request has a valid token attached. The note is then saved to the notes list of the user identified by the token.
 
-There are several ways of sending the token from the browser to the server. We will use the Authorization header. The header also tells which authentication scheme is used. This can be necessary if the server offers multiple ways to authenticate. Identifying the scheme tells the server how the attached credentials should be interpreted.
+There are several ways of sending the token from the browser to the server. We will use the `Authorization` header. The header also tells which authentication scheme is used. This can be necessary if the server offers multiple ways to authenticate. Identifying the scheme tells the server how the attached credentials should be interpreted.
 
 The Bearer scheme is suitable for our needs.
 
@@ -63,19 +80,19 @@ In practice, this means that if the token is, for example, the string eyJhbGciOi
 Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
 ```
 
-The validity of the token is checked with jwt.verify. The method also decodes the token, or returns the Object which the token was based on.
+The validity of the token is checked with `jwt.verify`. The method also decodes the token, or returns the Object which the token was based on (the `userForToken` we created previously).
 
 ```js
 const decodedToken = jwt.verify(token, process.env.SECRET)
 ```
 
-If the token is missing or it is invalid, the exception JsonWebTokenError is raised. We need to extend the error handling middleware to take care of this particular case:
+If the token is missing or it is invalid, the exception `JsonWebTokenError` is raised. We need to extend the error handling middleware to take care of this particular case:
 
 The object decoded from the token contains the username and id fields, which tell the server who made the request.
 
 If the application has multiple interfaces requiring identification, JWT's validation should be separated into its own middleware. An existing library like express-jwt could also be used.
 
-Problems of Token-based authentication
+## Problems of Token-based authentication
 
 Token authentication is pretty easy to implement, but it contains one problem. Once the API user, eg. a React app gets a token, the API has a blind trust to the token holder. What if the access rights of the token holder should be revoked?
 
@@ -116,4 +133,30 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
   response.status(204).end()
 })
 ```
+
+we can extract this repeated logic into a middleware function that will save the token and the user in the request itself as a property, so we can remove this logic from the route handlers and just access the request property directly:
+
+```js
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+
+  if (authorization && authorization.startsWith('Bearer ')) {
+    request.token = authorization.replace('Bearer ', '')
+  } else request.token = null
+
+  next()
+}
+
+const userExtractor = async (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  request.user = await User.findById(decodedToken.id)
+
+  next()
+}
+```
+
 

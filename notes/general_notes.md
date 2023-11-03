@@ -180,25 +180,38 @@ JavaScripts basics (special attention to pseudo-classes, constructors, etc.)
 
 ### b: Testing the backend
 
-Test environment
-supertest
-Initializing the database before tests
-Running tests one by one
-async/await
-async/await in the backend
-More tests and refactoring the backend
-Error handling and async/await
-Eliminating the try-catch
-Optimizing the beforeEach function
-A true full stack developer's oath
-Refactoring tests
+- Test environment
+- supertest
+- Initializing the database before tests
+- Running tests one by one
+- async/await
+- async/await in the backend
+- More tests and refactoring the backend
+- Error handling and async/await
+- Eliminating the try-catch
+- Optimizing the beforeEach function
+- A true full stack developer's oath
+- Refactoring tests
 
 ### c: User administration
 
-References across collections
-Mongoose schema for users
-Creating users
-Creating a new note
-Populate
+- References across collections
+- Mongoose schema for users
+- Creating users
+- Creating a new note
+- Populate
 
 ### d: Token authentication
+
+- Limiting creating new notes to logged-in users
+- Problems of Token-based authentication
+- End notes
+
+## Part 5: Testing React apps
+
+### a: Login in frontend
+
+- Handling login
+- Creating new notes
+- Saving the token to the browser's local storage
+- A note on using local storage
