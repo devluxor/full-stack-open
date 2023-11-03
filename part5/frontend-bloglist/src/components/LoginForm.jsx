@@ -1,6 +1,23 @@
-const LoginForm = ({username, password, handleLogin, setUsername, setPassword}) => {
+import { useState } from 'react'
+
+const LoginForm = ({loginUser}) => {
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('') 
+
+  const login = async (event) => {
+
+    event.preventDefault()
+    const success = await loginUser(username, password)
+
+
+    if (success) {
+      setUsername('')
+      setPassword('')
+    } else setPassword('')
+  }
+
   return ( 
-    <form onSubmit={handleLogin}>
+    <form onSubmit={login}>
       <div>
         username
           <input

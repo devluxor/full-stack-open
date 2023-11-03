@@ -88,7 +88,7 @@ You can access the current value of that ref through the ref.current property. T
 
 This hook ensures the same reference (ref) that is kept throughout re-renders of the component.
 
-The function that creates the component is wrapped inside of a forwardRef function call. This way the component can access the ref that is assigned to it.
+The function that creates the component (that will use the refs) is wrapped inside of a forwardRef function call. This way the component can access the ref that is assigned to it.
 
 The component uses the useImperativeHandle hook to make its toggleVisibility function available outside of the component.
 
@@ -97,6 +97,14 @@ To recap, the useImperativeHandle function is a React hook, that is used for def
 This trick works for changing the state of a component, but it looks a bit unpleasant. We could have accomplished the same functionality with slightly cleaner code using "old React" class-based components. We will take a look at these class components during part 7 of the course material. So far this is the only situation where using React hooks leads to code that is not cleaner than with class components.
 
 There are also other use cases for refs than accessing React components.
+
+create step guid of this pattern
+  // this makes toggleVisibility function available to other functions in the
+  // parent component, App, via the noteFormRef object (refs are like a little
+  // pocket of a component that React does not track, in this case the pocket
+  // contains a reference to this function toggleVisibility)
+  // in combination with useImperativeHandle, we make it available to the parent
+  // component.
 
 A point about components
 
