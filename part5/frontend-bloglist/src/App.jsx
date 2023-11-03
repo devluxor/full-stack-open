@@ -13,6 +13,7 @@ const App = () => {
   const [author, setAuthor] = useState('') 
   const [url, setURL] = useState('') 
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -44,13 +45,16 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      // setErrorMessage('Wrong credentials')
-      // setTimeout(() => {
-      //   setErrorMessage(null)
-      // }, 5000)
-      console.log(exception)
+      displayNotification({type: 'fail', message: 'Wrong credentials'})
       setPassword('')
     }
+  }
+
+  const displayNotification = (notification, delay=4000) => {
+    setNotification(notification)
+    setTimeout(() => {
+      setNotification(null)
+    }, delay)
   }
 
   const handleLogout = () => {
@@ -99,6 +103,10 @@ const App = () => {
     try {
       const addedBlog = await blogService.createBlog(newBlog)
       setBlogs(blogs.concat(addedBlog))
+      displayNotification({
+        type: 'success',
+        message: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
+      })
       resetInputs()
     } catch (e) {
       throw Error(e)
@@ -129,7 +137,18 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Notification notification={notification}/>
       {user ? loggedUserUI() : loginForm()}
+    </div>
+  )
+}
+
+const Notification = ({notification}) => {
+  if (!notification) return
+
+  return (
+    <div className={`notification ${notification.type}`}>
+      {notification.message}
     </div>
   )
 }
