@@ -26,6 +26,8 @@ const errorHandler = (error, request, response, next) => {
 
 const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
+  console.log("🤖 ~ file: middleware.js:29 ~ tokenExtractor ~ authorization:", authorization)
+
   if (authorization && authorization.startsWith('Bearer ')) {
     request.token = authorization.replace('Bearer ', '')
   } else request.token = null
