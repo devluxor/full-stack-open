@@ -1,16 +1,16 @@
 import { useState } from "react"
 
-const BlogList = ({blogs}) => {
+const BlogList = ({blogs, likeBlog}) => {
   if (!blogs) return
 
   return (
     <ul>
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} /> )}
+      {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} /> )}
     </ul>
   )
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -25,24 +25,35 @@ const Blog = ({ blog }) => {
   return (
     <div style={blogStyle}>
       <div>
-        <h5 style={{display: 'inline-block'}}>{`${blog.title}`} by {`${blog.author}`}</h5> 
-        <button onClick={() => setVisible(!visible)}>view</button>
+        <h5 style={{display: 'inline-block'}}>{`${blog.title}`} by {`${blog.author}`} </h5> 
+        <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
         <BlogDetails
           blog={blog}
           visible={visible}
+          likeBlog={likeBlog}
         ></BlogDetails>
       </div>
     </div>
   )  
 }
 
-const BlogDetails = ({blog, visible}) => {
+const BlogDetails = ({blog, visible, likeBlog}) => {
+  const [likes, setLikes] = useState(blog.likes)
+
+  const like = async () => {
+    await likeBlog(blog)
+    blog.likes += 1
+    setLikes(likes + 1)
+  }
+
   if (!visible) return
+
   return (
     <>
       <p>{blog.url}</p>
-      <p>likes {blog.likes}</p>
-      <p>{blog.user.username}</p>
+      <p style={{display: 'inline-block'}}>likes {likes}</p> 
+      <button onClick={like}>like</button>
+      <p>{blog?.user?.username || blog.username}</p>
     </>
   )
 }

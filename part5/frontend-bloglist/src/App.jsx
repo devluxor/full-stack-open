@@ -13,6 +13,7 @@ const App = () => {
   const [notification, setNotification] = useState(null)
 
   const blogFormRef = useRef()
+  const likeRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -73,7 +74,7 @@ const App = () => {
         <Toggable buttonLabel='new blog' ref={blogFormRef}>
           <AddBlogForm addBlog={addBlog} />
         </Toggable>
-        <BlogList blogs={blogs}/>
+        <BlogList blogs={blogs} likeBlog={likeBlog}/>
       </>
     )
   }
@@ -82,12 +83,19 @@ const App = () => {
     try {
       const addedBlog = await blogService.createBlog(newBlog)
       blogFormRef.current.toggleVisibility()
-      console.log("🤖 ~ file: App.jsx:85 ~ addBlog ~ blogFormRef.current:", blogFormRef.current)
       setBlogs(blogs.concat(addedBlog))
       displayNotification({
         type: 'success',
         message: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
       })
+    } catch (e) {
+      throw Error(e)
+    }
+  }
+
+  const likeBlog = async (blog) => {
+    try {
+      await blogService.updateBlog(blog)     
     } catch (e) {
       throw Error(e)
     }
