@@ -18,3 +18,11 @@
 button {
   margin-left: 5px;
 }
+
+.like {
+  background-color: palegreen;
+}
+
+.delete {
+  background-color: blue;
+}

@@ -1,16 +1,26 @@
 import { useState } from "react"
 
-const BlogList = ({blogs, likeBlog}) => {
+const BlogList = ({blogs, likeBlog, deleteBlog, user}) => {
   if (!blogs) return
 
   return (
     <ul>
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} /> )}
+      {blogs.map(blog => {
+        return (
+          <Blog 
+            key={blog.id} 
+            blog={blog} 
+            likeBlog={likeBlog} 
+            deleteBlog={deleteBlog}
+            user={user}
+          /> 
+        )
+      })}
     </ul>
   )
 }
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -31,19 +41,29 @@ const Blog = ({ blog, likeBlog }) => {
           blog={blog}
           visible={visible}
           likeBlog={likeBlog}
+          deleteBlog={deleteBlog}
+          user={user}
         ></BlogDetails>
       </div>
     </div>
   )  
 }
 
-const BlogDetails = ({blog, visible, likeBlog}) => {
+const BlogDetails = ({blog, visible, likeBlog, deleteBlog, user}) => {
   const [likes, setLikes] = useState(blog.likes)
+  const creatorId = blog.user.id || blog.user
+  const deleteVisible = creatorId === user.id
 
   const like = async () => {
-    await likeBlog(blog)
     blog.likes += 1
+    await likeBlog(blog)
     setLikes(likes + 1)
+  }
+
+  const delBlog = async () => {
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      await deleteBlog(blog)
+    }
   }
 
   if (!visible) return
@@ -52,8 +72,14 @@ const BlogDetails = ({blog, visible, likeBlog}) => {
     <>
       <p>{blog.url}</p>
       <p style={{display: 'inline-block'}}>likes {likes}</p> 
-      <button onClick={like}>like</button>
+      <button className='like' onClick={like}>like</button>
       <p>{blog?.user?.username || blog.username}</p>
+      {deleteVisible && 
+        <button 
+          className='delete' 
+          onClick={delBlog}
+        >delete</button>
+      }
     </>
   )
 }

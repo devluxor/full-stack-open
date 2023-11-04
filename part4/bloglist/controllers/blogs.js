@@ -31,7 +31,7 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-  const update = { likes: request.body.likes + 1 }
+  const update = { likes: request.body.likes }
   const updatedBlog = await Blog.findByIdAndUpdate(
                         request.params.id,
                         update,

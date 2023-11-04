@@ -15,9 +15,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService.getAll().then(blogs => {
+      const sortedBlogs = sortByLikes(blogs)
+      setBlogs( sortedBlogs )
+    })
   }, [])
 
   useEffect(() => {
@@ -73,7 +74,12 @@ const App = () => {
         <Toggable buttonLabel='new blog' ref={blogFormRef}>
           <AddBlogForm addBlog={addBlog} />
         </Toggable>
-        <BlogList blogs={blogs} likeBlog={likeBlog}/>
+        <BlogList 
+          blogs={blogs} 
+          likeBlog={likeBlog}
+          deleteBlog={deleteBlog}
+          user={user}
+        />
       </>
     )
   }
@@ -82,7 +88,8 @@ const App = () => {
     try {
       const addedBlog = await blogService.createBlog(newBlog)
       blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(addedBlog))
+      const sorted = sortByLikes(blogs.concat(addedBlog))
+      setBlogs(sorted)
       displayNotification({
         type: 'success',
         message: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
@@ -94,10 +101,33 @@ const App = () => {
 
   const likeBlog = async (blog) => {
     try {
-      await blogService.updateBlog(blog)     
+      await blogService.updateBlog(blog)  
     } catch (e) {
       throw Error(e)
     }
+  }
+
+  const deleteBlog = async (blog) => {
+    try {
+      await blogService.deleteBlog(blog)
+      const newBloglist = filterDeleted(blog.id || blog._id)
+      const sorted = sortByLikes(newBloglist)
+      setBlogs(sorted)
+    } catch (e) {
+      throw Error(e)
+    }
+  }
+
+  const filterDeleted = idToDelete => {
+    return blogs.filter(blog => {
+      const blogId = blog.id || blog._id
+      return blogId !== idToDelete
+    })
+  }
+
+  // in decreasing order of likes
+  const sortByLikes = (blogs) => {
+    return blogs.sort((a, b) => (b.likes - a.likes ))
   }
 
   return (
