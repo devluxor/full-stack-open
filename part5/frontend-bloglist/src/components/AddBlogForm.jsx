@@ -25,7 +25,7 @@ const AddBlogForm = ({ addBlog }) => {
         <Input value={title} name='title' handler={setTitle}/>
         <Input value={author} name='author' handler={setAuthor}/>
         <Input value={url} name='url' handler={setURL}/>
-        <button type="submit">Add new blog</button>
+        <button className='add-blog' type="submit">Add new blog</button>
       </form>
     </>
   )

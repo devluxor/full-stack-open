@@ -33,18 +33,16 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div>
-        <h5 style={{ display: 'inline-block' }}>{`${blog.title}`} by {`${blog.author}`} </h5>
-        <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
-        <BlogDetails
-          blog={blog}
-          visible={visible}
-          likeBlog={likeBlog}
-          deleteBlog={deleteBlog}
-          user={user}
-        ></BlogDetails>
-      </div>
+    <div className='blog' style={blogStyle}>
+      <h5 style={{ display: 'inline-block' }}>{`${blog.title}`} by {`${blog.author}`} </h5>
+      <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
+      <BlogDetails
+        blog={blog}
+        visible={visible}
+        likeBlog={likeBlog}
+        deleteBlog={deleteBlog}
+        user={user}
+      ></BlogDetails>
     </div>
   )
 }
