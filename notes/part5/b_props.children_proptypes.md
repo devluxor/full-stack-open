@@ -136,3 +136,13 @@ to use it like this:
 
 We create three separate instances of the component that all have their separate state:
 
+PropTypes
+
+We would like to enforce that when the Togglable component is used, specific props are given
+
+The expected and required props of a component can be defined with the prop-types package. 
+
+Don't forget to Lint also frontend with eslint
+
+
+

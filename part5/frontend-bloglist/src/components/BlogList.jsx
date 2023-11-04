@@ -1,19 +1,19 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const BlogList = ({blogs, likeBlog, deleteBlog, user}) => {
+const BlogList = ({ blogs, likeBlog, deleteBlog, user }) => {
   if (!blogs) return
 
   return (
     <ul>
       {blogs.map(blog => {
         return (
-          <Blog 
-            key={blog.id} 
-            blog={blog} 
-            likeBlog={likeBlog} 
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
             deleteBlog={deleteBlog}
             user={user}
-          /> 
+          />
         )
       })}
     </ul>
@@ -35,7 +35,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   return (
     <div style={blogStyle}>
       <div>
-        <h5 style={{display: 'inline-block'}}>{`${blog.title}`} by {`${blog.author}`} </h5> 
+        <h5 style={{ display: 'inline-block' }}>{`${blog.title}`} by {`${blog.author}`} </h5>
         <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
         <BlogDetails
           blog={blog}
@@ -46,10 +46,10 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
         ></BlogDetails>
       </div>
     </div>
-  )  
+  )
 }
 
-const BlogDetails = ({blog, visible, likeBlog, deleteBlog, user}) => {
+const BlogDetails = ({ blog, visible, likeBlog, deleteBlog, user }) => {
   const [likes, setLikes] = useState(blog.likes)
   const creatorId = blog.user.id || blog.user
   const deleteVisible = creatorId === user.id
@@ -71,12 +71,12 @@ const BlogDetails = ({blog, visible, likeBlog, deleteBlog, user}) => {
   return (
     <>
       <p>{blog.url}</p>
-      <p style={{display: 'inline-block'}}>likes {likes}</p> 
+      <p style={{ display: 'inline-block' }}>likes {likes}</p>
       <button className='like' onClick={like}>like</button>
       <p>{blog?.user?.username || blog.username}</p>
-      {deleteVisible && 
-        <button 
-          className='delete' 
+      {deleteVisible &&
+        <button
+          className='delete'
           onClick={delBlog}
         >delete</button>
       }

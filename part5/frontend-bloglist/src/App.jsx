@@ -33,16 +33,16 @@ const App = () => {
   const loginUser = async (username, password) => {
     try {
       const user = await loginService.login({ username, password })
-      
+
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
       setUser(user)
-      return true 
+      return true
     } catch (exception) {
-      displayNotification({type: 'fail', message: 'Wrong credentials'})
+      displayNotification({ type: 'fail', message: 'Wrong credentials' })
     }
   }
 
@@ -74,8 +74,8 @@ const App = () => {
         <Toggable buttonLabel='new blog' ref={blogFormRef}>
           <AddBlogForm addBlog={addBlog} />
         </Toggable>
-        <BlogList 
-          blogs={blogs} 
+        <BlogList
+          blogs={blogs}
           likeBlog={likeBlog}
           deleteBlog={deleteBlog}
           user={user}
@@ -101,7 +101,7 @@ const App = () => {
 
   const likeBlog = async (blog) => {
     try {
-      await blogService.updateBlog(blog)  
+      await blogService.updateBlog(blog)
     } catch (e) {
       throw Error(e)
     }
@@ -143,7 +143,7 @@ const Header = () => {
   return <h2>Bloglist</h2>
 }
 
-const Notification = ({notification}) => {
+const Notification = ({ notification }) => {
   if (!notification) return
 
   return (

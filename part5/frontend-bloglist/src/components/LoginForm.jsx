@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-const LoginForm = ({loginUser}) => {
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+const LoginForm = ({ loginUser }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const login = async (event) => {
     event.preventDefault()
@@ -14,26 +14,26 @@ const LoginForm = ({loginUser}) => {
     } else setPassword('')
   }
 
-  return ( 
+  return (
     <form onSubmit={login}>
       <div>
         username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            placeholder='User...'
-            onChange={({ target }) => setUsername(target.value)}
-          />
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          placeholder='User...'
+          onChange={({ target }) => setUsername(target.value)}
+        />
       </div>
       <div>
         password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
       </div>
       <button type="submit">login</button>
     </form>

@@ -1,9 +1,9 @@
-/* eslint-disable react/display-name */
-import { useState, forwardRef, useImperativeHandle} from "react"
+import { useState, forwardRef, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 
 const Toggable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
-  
+
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
 
@@ -27,5 +27,12 @@ const Toggable = forwardRef((props, ref) => {
     </div>
   )
 })
+
+Toggable.displayName = 'Toggable'
+
+Toggable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
+
 
 export default Toggable

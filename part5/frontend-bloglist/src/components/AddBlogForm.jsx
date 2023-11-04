@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-const AddBlogForm = ({addBlog}) => {
-  const [title, setTitle] = useState('') 
-  const [author, setAuthor] = useState('') 
+const AddBlogForm = ({ addBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
   const [url, setURL] = useState('')
 
   const createBlog = async (e) => {
@@ -31,15 +31,15 @@ const AddBlogForm = ({addBlog}) => {
   )
 }
 
-const Input = ({value, name, handler}) => {
+const Input = ({ value, name, handler }) => {
   const placeholder = `${name.charAt(0).toUpperCase()}${name.slice(1)}...`
 
   return (
     <input
-        value={value}
-        name={name}
-        placeholder={placeholder}
-        onChange={e => handler(e.target.value)}
+      value={value}
+      name={name}
+      placeholder={placeholder}
+      onChange={e => handler(e.target.value)}
     ></input>
   )
 }

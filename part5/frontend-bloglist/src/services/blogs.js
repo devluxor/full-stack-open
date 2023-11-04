@@ -13,9 +13,9 @@ const getAll = async () => {
 }
 
 const createBlog = async (newBlog) => {
-  const config = { headers: { 
-    Authorization: token 
-  }}
+  const config = { headers: {
+    Authorization: token
+  } }
 
   try {
     const response = await axios.post(baseUrl, newBlog, config)
@@ -36,9 +36,9 @@ const updateBlog = async (blog) => {
 }
 
 const deleteBlog = async (blog) => {
-  const config = { headers: { 
-    Authorization: token 
-  }}
+  const config = { headers: {
+    Authorization: token
+  } }
 
   const blogId = blog.id || blog._id
   try {
@@ -49,4 +49,4 @@ const deleteBlog = async (blog) => {
   }
 }
 
-export default { getAll, setToken, createBlog, updateBlog, deleteBlog}
+export default { getAll, setToken, createBlog, updateBlog, deleteBlog }
