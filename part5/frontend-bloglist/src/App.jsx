@@ -13,7 +13,6 @@ const App = () => {
   const [notification, setNotification] = useState(null)
 
   const blogFormRef = useRef()
-  const likeRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
