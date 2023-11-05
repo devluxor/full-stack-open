@@ -56,7 +56,7 @@ describe('Blog app', function() {
           cy.get('.bloglist')
             .contains(`${Cypress.env('TESTSTRING')} by ${Cypress.env('TESTSTRING')}`)
         })
-  
+
         it('A blog can be liked', function() {
           cy.createBlog(Cypress.env('TESTSTRING'))
           cy.contains('view').click()
@@ -64,7 +64,7 @@ describe('Blog app', function() {
           cy.get('button.like').click()
           cy.contains('likes 1')
         })
-  
+
         it('A blog can be deleted by its creator', function() {
           cy.createBlog(Cypress.env('TESTSTRING'))
           cy.get('.bloglist').find('.blog').should('have.length', 1)
@@ -73,7 +73,7 @@ describe('Blog app', function() {
           cy.get('button.delete').click()
           cy.get('.bloglist').find('.blog').should('have.length', 0)
         })
-  
+
         it('Only the creator can see the delete button', function() {
           const testString = Cypress.env('TESTSTRING')
           cy.createBlog(Cypress.env('TESTSTRING'))
