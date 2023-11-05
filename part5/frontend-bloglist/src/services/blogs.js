@@ -8,8 +8,12 @@ const setToken = newToken => {
 }
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl)
-  return response.data
+  try {
+    const response = await axios.get(baseUrl)
+    return response.data
+  } catch (e) {
+    throw Error(e)
+  }
 }
 
 const createBlog = async (newBlog) => {

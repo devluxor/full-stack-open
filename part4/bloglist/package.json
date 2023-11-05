@@ -7,7 +7,10 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "test": "NODE_ENV=test jest --verbose --runInBand",
-    "build:ui": "rm -rf dist && cd ../../part5/frontend-bloglist && npm run build && cp -r dist ../../part4/bloglist"
+    "build:ui": "rm -rf dist && cd ../../part5/frontend-bloglist && npm run build && cp -r dist ../../part4/bloglist",
+    "start:test": "NODE_ENV=test node index.js",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy"
   },
   "author": "Lucas Sorribes",
   "license": "UNLICENSED",

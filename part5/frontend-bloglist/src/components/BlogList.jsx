@@ -4,7 +4,7 @@ const BlogList = ({ blogs, likeBlog, deleteBlog, user }) => {
   if (!blogs) return
 
   return (
-    <ul>
+    <ul className='bloglist'>
       {blogs.map(blog => {
         return (
           <Blog
@@ -33,7 +33,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   }
 
   return (
-    <div className='blog' style={blogStyle}>
+    <div className='blog' style={blogStyle} id={blog.title}>
       <h5 style={{ display: 'inline-block' }}>{`${blog.title}`} by {`${blog.author}`} </h5>
       <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
       <BlogDetails

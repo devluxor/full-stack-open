@@ -94,6 +94,7 @@ const App = () => {
         type: 'success',
         message: `a new blog ${addedBlog.title} by ${addedBlog.author} added`
       })
+      return addedBlog
     } catch (e) {
       throw Error(e)
     }
