@@ -33,6 +33,7 @@
 - AJAX
 - Single page app
 - JavaScript frontend libraries (jQuery, Angular, **React and Redux**)
+- Mermaid syntax in Markdown
 
 ## Part 1: Introduction to React
 
