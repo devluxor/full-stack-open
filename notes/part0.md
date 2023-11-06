@@ -9,6 +9,7 @@
 - Resource fetching cycle (resource request, response, render/execute resource, etc.)
 - Forms
 - AJAX
+- REST
 - Single page app
 - JavaScript frontend libraries (jQuery, Angular, **React and Redux**)
 - Mermaid syntax in Markdown

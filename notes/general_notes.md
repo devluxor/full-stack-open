@@ -40,7 +40,7 @@
 ### a: Introduction to React
 
 - Vite
-- React basics (components, JSX, etc.)
+- React basics
 
 ### b: JavaScript
 
