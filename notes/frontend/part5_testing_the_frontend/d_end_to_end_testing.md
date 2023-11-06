@@ -1,6 +1,6 @@
 # End to end testing
 
-o far we have tested the backend as a whole on an API level using integration tests and tested some frontend components using unit tests.
+So far we have tested the backend as a whole on an API level using integration tests and tested some frontend components using unit tests.
 
 Next, we will look into one way to test the system as a whole using End to End (E2E) tests.
 

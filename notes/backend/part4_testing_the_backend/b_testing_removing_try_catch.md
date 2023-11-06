@@ -158,15 +158,14 @@ A better option is to specify the tests that need to be run as parameters of the
 
 NB: When running a single test, the mongoose connection might stay open if no tests using the connection are run. The problem might be because supertest primes the connection, but Jest does not run the afterAll portion of the code.
 
-Async/await
 
-More tests and refactoring the backend
+### More tests and refactoring the backend
 
 When code gets refactored, there is always the risk of regression, meaning that existing functionality may break. Let's refactor the remaining operations by first writing a test for each route of the API.
 
 The same verification steps will repeat in different tests later on, and it is a good idea to extract these steps into helper functions. Let's add the function into a new file called tests/test_helper.js which is in the same directory as the test file.
 
-Eliminating the try-catch
+### Eliminating the try-catch
 
 Async/await unclutters the code a bit, but the 'price' is the try/catch structure required for catching exceptions. All of the route handlers follow the same structure
 
@@ -254,7 +253,7 @@ NB: the material uses the `toContain` matcher in several places to verify that a
 
 NB: when you are writing your tests it is better to not execute all of your tests, only execute the ones you are working on. Read more about this here.
 
-Refactoring tests
+## Refactoring tests
 
 Our test coverage is currently lacking. Some requests like GET /api/notes/:id and DELETE /api/notes/:id aren't tested when the request is sent with an invalid id. The grouping and organization of tests could also use some improvement, as all tests exist on the same "top level" in the test file. The readability of the test would improve if we group related tests with describe blocks.
 

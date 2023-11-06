@@ -33,35 +33,35 @@ React is an open-source JavaScript library for building user interfaces (UIs). I
 
 Here are some key concepts and fundamentals of React:
 
-- Component-Based Architecture:
-React is all about breaking down your user interface into small, reusable components. A component is a self-contained piece of the UI that can be created, rendered, and managed independently. This approach makes it easier to manage complex UIs and encourages reusability.
+1. **Component-Based Architecture**:
+   React is all about breaking down your user interface into small, reusable components. A component is a self-contained piece of the UI that can be created, rendered, and managed independently. This approach makes it easier to manage complex UIs and encourages reusability.
 
-- Virtual DOM:
-React uses a virtual representation of the actual DOM (Document Object Model) called the Virtual DOM. When the state of a component changes, React updates the Virtual DOM and then calculates the most efficient way to update the real DOM. This minimizes the amount of direct manipulation of the DOM, resulting in better performance.
+2. **Virtual DOM**:
+   React uses a virtual representation of the actual DOM (Document Object Model) called the Virtual DOM. When the state of a component changes, React updates the Virtual DOM and then calculates the most efficient way to update the real DOM. This minimizes the amount of direct manipulation of the DOM, resulting in better performance.
 
-- Declarative Syntax:
-React promotes a declarative approach to building UIs. Instead of manually manipulating the DOM to reflect changes in your application's state, you define how your UI should look based on the current state, and React takes care of updating the DOM accordingly. This makes the code more predictable and easier to understand.
+3. **Declarative Syntax**:
+   React promotes a declarative approach to building UIs. Instead of manually manipulating the DOM to reflect changes in your application's state, you define how your UI should look based on the current state, and React takes care of updating the DOM accordingly. This makes the code more predictable and easier to understand.
 
-- Component Lifecycle:
-React components have a lifecycle that includes various methods, such as componentDidMount, componentDidUpdate, and componentWillUnmount. These lifecycle methods allow you to hook into different stages of a component's existence, enabling you to perform actions like data fetching, updates, and cleanup.
+4. **Component Lifecycle**:
+   React components have a lifecycle that includes various methods, such as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount`. These lifecycle methods allow you to hook into different stages of a component's existence, enabling you to perform actions like data fetching, updates, and cleanup.
 
-- State and Props:
-In React, you have two primary ways to manage data in your components: state and props. State represents the internal data and state of a component and can be changed over time. Props are data that is passed into a component from its parent component, and they are read-only within the component. We need special functions to alter a component's state (the function returned by `useState`)
+5. **State and Props**:
+   In React, you have two primary ways to manage data in your components: state and props. State represents the internal data and state of a component and can be changed over time. Props are data that is passed into a component from its parent component, and they are read-only within the component.
 
-- Unidirectional Data Flow:
-React enforces a unidirectional data flow, meaning data flows from parent components to child components through props. This helps maintain a clear and predictable flow of data and makes debugging and understanding the application easier.
+6. **Unidirectional Data Flow**:
+   React enforces a unidirectional data flow, meaning data flows from parent components to child components through props. This helps maintain a clear and predictable flow of data and makes debugging and understanding the application easier.
 
-- JSX (JavaScript XML):
-React uses a syntax extension called JSX, which allows you to write HTML-like code within your JavaScript. JSX is transpiled into JavaScript code that creates and manipulates React elements. It makes the code more readable and familiar to web developers. This compilation is handled by Babel. Projects created with `create-react-app` or `vite` are configured to compile automatically. 
+7. **JSX (JavaScript XML)**:
+   React uses a syntax extension called JSX, which allows you to write HTML-like code within your JavaScript. JSX is transpiled into JavaScript code that creates and manipulates React elements. It makes the code more readable and familiar to web developers.
 
-- React Router:
-For building single-page applications, React Router is a popular library used to handle client-side routing. It allows you to define routes and navigation in a declarative way.
+8. **React Router**:
+   For building single-page applications, React Router is a popular library used to handle client-side routing. It allows you to define routes and navigation in a declarative way.
 
-- React Hooks:
-Introduced in React 16.8, hooks are functions that allow you to use state and other React features in functional components. This made it possible to use state and side effects in functional components, rather than just class components.
+9. **React Hooks**:
+   Introduced in React 16.8, hooks are functions that allow you to use state and other React features in functional components. This made it possible to use state and side effects in functional components, rather than just class components.
 
-- Ecosystem and Community:
-React has a vast ecosystem of libraries and tools that complement it. There is a strong and active community of developers contributing to the React ecosystem, which means you can find a wealth of resources, tutorials, and third-party libraries to help you build your applications.
+10. **Ecosystem and Community**:
+    React has a vast ecosystem of libraries and tools that complement it. There is a strong and active community of developers contributing to the React ecosystem, which means you can find a wealth of resources, tutorials, and third-party libraries to help you build your applications.
 
 To get started with React, you need to set up a development environment, typically using tools like Node.js, npm (Node Package Manager), and a code editor. You can create React applications by using a tool like Create React App, which simplifies the setup process.
 
@@ -81,6 +81,7 @@ This creates the project scaffolding
 
 ```bash
 my_react_app/
+  ├── dist/
   ├── node_modules/
   ├── public/
   │   ├── index.html
@@ -99,6 +100,7 @@ my_react_app/
   │   │   │   └── SomeComponent.css
   │   ├── data/
   │   ├── services/
+  │   │   └── someService.js
   │   ├── utils/
   ├── package.json
   ├── package-lock.json
@@ -123,6 +125,8 @@ Here's a brief explanation of each of these folders and files:
 - `services`: This folder can house utility functions, API services, or other business logic.
 - `utils`: Store utility functions and helper code here.
 - `package.json` and `package-lock.json`: These files define your project's dependencies and scripts. `package-lock.json` is automatically generated and helps ensure consistent dependencies across different environments.
+
+4. `dist`: this folder will contain the production build
 
 `index.html`: this file is the main HTML template for your application.
 

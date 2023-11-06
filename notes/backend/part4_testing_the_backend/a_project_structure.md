@@ -81,10 +81,10 @@ const morgan = require('morgan')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 
-// 
+
 const bloglistRouter = require('./controllers/blogs')
 
-// The app object is instantiated on creation of the Express server. 
+// The app object is instantiated upon the creation of the Express server. 
 const app = express()
 
 // Database imports + extra setting + connection to the database + logging connection success/failure
@@ -126,11 +126,11 @@ module.exports = app
 
 Note that the responsibility of establishing the connection to the database has been given to the app.js module. 
 
-### `dist`
+### `dist/`
 
 It is empty in this case, but this would contain the production version (minificated, in a single file, etc) of the frontend. Usually imported via a custom `npm run build:ui` command, set in the `package.json` file in the root folder of the application. 
 
-### `controllers`
+### `controllers/`
 
 #### `bloglist.js`
 
@@ -198,7 +198,7 @@ app.use('/api/blog', bloglistRouter)
 
 The router object we defined earlier in the `bloglist.js` file is used if the URL of the request starts with `/api/blogs`. For this reason, the `bloglistRouter` object must only define the relative parts of the routes, i.e. the empty path `/` or just the parameter `/:id`.
 
-### `models`
+### `models/`
 
 #### `blog.js`
 
@@ -217,11 +217,7 @@ const blogSchema = new mongoose.Schema({
 module.exports = mongoose.model('Blog', blogSchema)
 ```
 
-### `package-lock.json`
-
-### `package.json`
-
-### `utils`
+### `utils/`
 
 #### `config.js`
 
