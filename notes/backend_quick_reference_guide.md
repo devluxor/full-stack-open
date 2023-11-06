@@ -35,6 +35,7 @@ Here's a general roadmap to guide you through the process. Keep in mind that the
 2. **Express Application Setup**:
    - Install the Express.js framework by running `npm install express`.
    - Create the main entry point file (e.g., `app.js` or `server.js`) where you'll set up your Express application.
+   - Set scripts and other options in the `package.json` file. For example
 
 3. **Middleware**:
    - Set up essential middleware such as body parsers, CORS, and compression.
