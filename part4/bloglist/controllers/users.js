@@ -6,7 +6,7 @@ const MIN_PASSWORD_LENGTH = 3
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({}).populate('blogs', {title: 1, author: 1, likes: 1})
-  // the parameter gicen to the populate method defines that the ids referencing
+  // the argument given to the populate method defines that the ids referencing
   // blog objects in the blogs field of the user document will be replaced
   // by the referenced blog document (pseudo join queries)
 

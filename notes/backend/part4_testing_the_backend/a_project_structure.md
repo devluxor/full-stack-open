@@ -221,7 +221,21 @@ module.exports = mongoose.model('Blog', blogSchema)
 
 #### `config.js`
 
-The handling of environment variables is extracted into a separate `utils/config.js` file.
+The handling of environment variables is extracted into a separate `utils/config.js` file:
+
+```js
+require('dotenv').config()
+
+const PORT = process.env.PORT
+const MONGODB_URI = process.env.NODE_ENV === 'test'
+    ? process.env.TEST_MONGODB_URI // one mock db for testing
+    : process.env.MONGODB_URI // the real db
+
+module.exports = { // then import as config, access like config.PORT, etc.
+    MONGODB_URI,
+    PORT
+}
+```
 
 The other parts of the application can access the environment variables by importing the configuration module:
 

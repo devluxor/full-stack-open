@@ -57,7 +57,7 @@
 }
 ```
 
-7. BACKEND: Choose platform: Fly.io, Render, Heroku, etc. Initialize it and configure it in your backend.
+7. BACKEND: Choose platform: Fly.io, Render, Heroku, etc. Initialize it and configure it in your backend. For example, set the environment variables in the corresponding platform (via CLI or the platform's UI)
 
 8. BACKEND: Add more scripts to the `package.json` file. For example:
 

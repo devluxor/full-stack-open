@@ -87,33 +87,19 @@ Mongoose is an Object Data Modeling (ODM) library for Node.js and MongoDB, which
    - Read data from the collection:
 
      ```javascript
-     User.find({ age: 25 }, (err, users) => {
-       if (err) {
-         console.error(err);
-       } else {
-         console.log(users);
-       }
-     });
+     User.find({ age: 25 });
      ```
 
    - Update a document:
 
      ```javascript
-     User.updateOne({ username: 'john' }, { age: 31 }, (err) => {
-       if (err) {
-         console.error(err);
-       }
-     });
+     User.updateOne({ username: 'john' }, { age: 31 });
      ```
 
    - Delete a document:
 
      ```javascript
-     User.deleteOne({ username: 'john' }, (err) => {
-       if (err) {
-         console.error(err);
-       }
-     });
+     User.deleteOne({ username: 'john' });
      ```
 
    - This methods return promise-like objects, and they should be used with the `async`/`await` syntax. For example:
@@ -179,7 +165,57 @@ We also added the hardcoded port of the server into the PORT environment variabl
 
 **The .env file should be gitignored right away since we do not want to publish any confidential information publicly online!**
 
-The environment variables defined in the .env file can be taken into use with the expression require('dotenv').config() and you can reference them in your code just like you would reference normal environment variables, with the familiar process.env.MONGODB_URI
+The environment variables defined in the .env file can be taken into use with the expression require('dotenv').config() and you can reference them in your code just like you would reference normal environment variables, with the familiar `process.env.MONGODB_URI`
+
+## Important 
+
+validations are not done when editing a document. The documentation addresses the issue by explaining that validations are not run by default when `findOneAndUpdate` is executed. We can fix it by passing an extra configuration object:
+
+```js
+app.put('/update/:id', (request, response, next) => {
+  // ...
+  Note.findByIdAndUpdate(
+    request.params.id, 
+    { newData },
+    { new: true, runValidators: true, context: 'query' } // configuration object. notice the second property
+  )
+  // ... 
+})
+```
+
+## Example of schema:
+
+```js
+const mongoose = require('mongoose')
+
+const userSchema = new mongoose.Schema({
+  username: {  // validations 
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  blogs: [ // this will contain an array with references to blog document.
+    {      // as a way to make pseudo join queries in Mongo via the populate method
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog'
+    }
+  ],
+})
+
+userSchema.set('toJSON', {  // we can add custom toJSON methods to correctly format and send/display objects
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+    // the passwordHash should not be revealed
+    delete returnedObject.passwordHash
+  }
+})
+
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
+```
 
 ## Moving Error handling into middleware
 
