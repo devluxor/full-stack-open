@@ -22,7 +22,7 @@ The database is based on MongoDB (non-relational); we interact with it via Mongo
 ├── dist
 │   └── ...
 ├── controllers
-│   └── bloglist.js
+│   └── blogs.js
 ├── models
 │   └── blog.js
 ├── package-lock.json
@@ -132,48 +132,64 @@ It is empty in this case, but this would contain the production version (minific
 
 ### `controllers/`
 
-#### `bloglist.js`
+#### `blogs.js`
 
-The route handlers have also been moved into a dedicated module. The event handlers for routes are commonly referred to as controllers, and for this reason we have created a new `controllers` directory. All of the routes related to the app are now in the `bloglist.js` module under the `controllers` directory:
+The route handlers have also been moved into a dedicated module. The event handlers for routes are commonly referred to as controllers, and for this reason we have created a new `controllers` directory. All of the routes related to the app are now in the `blogs.js` module under the `controllers` directory:
 
 ```js
-const bloglistRouter = require('express').Router()
-
-// the database handle, imports the Mongoose schema
+const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
-bloglistRouter.get('/', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
+  response.json(blogs)
 })
 
-bloglistRouter.get('/:id', (request, response, next) => {
-	Blog.findById(request.params.id)
-		.then(blog => {
-			if (blog) response.json(blog)
-			else response.status(404).end()
-		})
+blogsRouter.post('/', userExtractor, async (request, response) => {
+  const body = request.body
+  const user = request.user
+  
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    user: user.id
+  })
+
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+  response.status(201).json({
+    ...savedBlog._doc,
+    username: user.username
+  })
 })
 
-bloglistRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
+blogsRouter.put('/:id', async (request, response) => {
+  // ...
 })
 
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const parameterId = request.params.id
+  const blog = await Blog.findById(parameterId)
+
+  if (blog.user.toString() !== request.user.id) {
+    return response.status(401).json({ error: 'unauthorized user'})
+  }
+  
+  await blog.deleteOne()
+  response.status(204).end()
+})
 
 // we would add all routes here
 // if any route needs helpers, we can import them
 // from a `controllers_helpers.js` module, for example.
 
-module.exports = bloglistRouter
+module.exports = blogsRouter
 ```
 
 All routes are now defined for the router object, similar to what I did before with the object representing the entire application, `app` in the `app.js` file in the root folder.
