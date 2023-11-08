@@ -150,11 +150,11 @@ mongoose.connect(url)
   })
 ```
 
-It's not a good idea to hardcode the address of the database into the code, so instead the address of the database is passed to the application via the MONGODB_URI environment variable.
+It's not a good idea to hardcode the address of the database into the code, so instead the address of the database is passed to the application via the `MONGODB_URI` environment variable.
 
 There are many ways to define the value of an environment variable. We can use the dotenv library.
 
-To use the library, we create a .env file at the root of the project. The environment variables are defined inside of the file, and it can look like this:
+To use the library, we create a `.env` file at the root of the project. The environment variables are defined inside of the file, and it can look like this:
 
 ```bash
 MONGODB_URI=mongodb+srv://fullstack:<password>@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority
