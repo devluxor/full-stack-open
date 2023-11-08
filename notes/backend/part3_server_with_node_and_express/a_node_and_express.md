@@ -285,3 +285,6 @@ app.use(express.static('public')); // Serve static files from the 'public' direc
 
 A very common example of middleware is the logger morgan.
 
+## Important
+
+However, Node.js uses so-called CommonJS modules. The reason for this is that the Node ecosystem had a need for modules long before JavaScript supported them in the language specification. Node supports now also the use of ES6 modules, but since the support is not quite perfect yet, we'll stick to CommonJS modules.
