@@ -63,7 +63,17 @@ Now the Express app and the code taking care of the web server are separated fro
 
 ### `app.js`
 
-The `app.js` file that creates the actual application takes the router into use as shown below:
+The `app.js` file that creates the actual application takes the router into use as shown below. 
+
+Remember that the order of routes and middleware is important! One possible approach would be:
+
+1. general middleware like cors, the token extractors for each request, json response parsers
+2. static files
+3. server side loggers like morgan
+4. route controllers
+5. extra route controllers (for testing, i.e.)
+6. unknown routes handlers
+7. error handlers.
 
 ```js
 // we create the necessary references to the modules we have installed via `npm` or that are
@@ -109,16 +119,34 @@ morgan.token('body', req => {
 
 // Setup the middleware; you can invoke app.use(<specific_middleware_layer_here>) 
 // for every middleware layer that you want to add onto your Express middleware stack. 
-app.use(morgan(':method :url :status :body'))
 app.use(cors())
 app.use(express.json())
-app.use(middleware.unknownEndpoint)
-app.use(middleware.errorHandler)
+app.use(morgan(':method :url :status :body'))
+
+// To make express show static content, the page index.html and the JavaScript, etc., 
+// it fetches, we need a built-in middleware from Express called static.
+// When we add the following amidst the declarations of middlewares
+app.use(express.static('dist'))
 
 // The router we defined earlier is used if the URL of the request starts with /api/blogs. 
 // For this reason, the bloglistRouter object must only define the relative parts of the routes, 
 // i.e. the empty path / or just the parameter /:id.
+
+// Now HTTP GET requests to the address www.serversaddress.com/index.html or www.serversaddress.com 
+// will show the React frontend. 
+// GET requests to the address www.serversaddress.com/api/blogs will be handled by the backend code.
+// Because of our situation, both the frontend and the backend are at the same address, 
+// we can declare `baseUrl` as a relative URL ( like baseURL = '/api/blogs') in the services 
+// folder of the frontend (the one that contains the API for CRUD operations). 
+// This means we can leave out the part declaring the server.
 app.use('/api/blogs', bloglistRouter)
+
+
+// The middleware for handling unknown routes has to be very close to the end. The errorHadler
+// middleware has to be at the end.
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
+
 
 // we export the app object after connecting to the database and adding all the necessary layers
 module.exports = app
