@@ -1,5 +1,29 @@
 ## Validation and eslint
 
+### Schema validations example:
+
+```js
+// ...
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  passwordHash: {
+    type: String,
+    required: true
+  },
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog'
+    }
+  ],
+})
+// ..
+```
+
 Remember that validations are not done when updating a document by default. The documentation addresses the issue by explaining that validations are not run by default when `findOneAndUpdate` is executed. We can fix it by passing an extra configuration object:
 
 ```js
