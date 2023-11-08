@@ -212,9 +212,7 @@ userSchema.set('toJSON', {  // we can add custom toJSON methods to correctly for
   }
 })
 
-const User = mongoose.model('User', userSchema)
-
-module.exports = User
+module.exports = mongoose.model('User', userSchema)
 ```
 
 ## Moving Error handling into middleware

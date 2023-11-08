@@ -265,6 +265,10 @@ const blogSchema = new mongoose.Schema({
   likes: Number
 })
 
+// .. we could add methods to the schema, like a custom toJSON method
+// to format documents without private info, appropriate string forms,
+// date formatting, etc.
+
 module.exports = mongoose.model('Blog', blogSchema)
 ```
 
