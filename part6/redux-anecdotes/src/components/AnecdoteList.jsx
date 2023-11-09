@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from 'react-redux'
-import { vote } from '../reducers/anecdoteReducer'
-import { displayNotification, removeNotification } from '../reducers/notificationReducer'
+import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   // these two give access to the store (now managed by super-parent Provider)
@@ -16,10 +16,9 @@ const AnecdoteList = () => {
     }
   })
 
-  const voteAnecdote = (anecdote) => {
-    dispatch(vote(anecdote.id))
-    dispatch(displayNotification(`You voted for ${anecdote.content}!`))
-    setTimeout(() => dispatch(removeNotification()), 4000)
+  const vote = (anecdote) => {
+    dispatch(voteAnecdote(anecdote))
+    dispatch(setNotification(`You created ${anecdote.content}!`, 4))
   }
   
   return (
@@ -30,7 +29,7 @@ const AnecdoteList = () => {
           <Anecdote 
             key={anecdote.id} 
             anecdote={anecdote}
-            handleClick={() => voteAnecdote(anecdote)}
+            handleClick={() => vote(anecdote)}
           />
         )
       })}

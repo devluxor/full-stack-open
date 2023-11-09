@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 
 import { createSlice } from '@reduxjs/toolkit'
+import anecdoteService from '../services/anecdotes'
 
-
-const getId = () => (100000 * Math.random()).toFixed(0)
+// const getId = () => (100000 * Math.random()).toFixed(0)
 
 
 // const reducer = (state = initialState, action) => {
@@ -53,10 +53,6 @@ const anecdotesSlice = createSlice({
   name: 'anecdotes',
   initialState: [],
   reducers: {
-    addAnecdote(state, action) {
-      state.push(action.payload)
-    },
-
     vote(state, action) {
       const id = action.payload
       const anecdoteToVote = state.find(a => a.id === id)
@@ -73,11 +69,33 @@ const anecdotesSlice = createSlice({
     },
 
     setAnecdotes(state, action) {
-      return action.payload
+      const sortedAnecdotes = sortByVotes(action.payload)
+      return sortedAnecdotes
     }
   }
 })
 
-export const { addAnecdote, vote, appendAnecdote, setAnecdotes } = anecdotesSlice.actions
+export const {vote, appendAnecdote, setAnecdotes } = anecdotesSlice.actions
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+
+export const createAnecdote = content => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch(appendAnecdote(newAnecdote))
+  }
+}
+
+export const voteAnecdote = anecdote => {
+  return async dispatch => {
+    await anecdoteService.updateVotes(anecdote)
+    dispatch(vote(anecdote.id))
+  }
+}
 
 export default anecdotesSlice.reducer
