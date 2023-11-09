@@ -6,7 +6,14 @@ const AnecdoteList = () => {
   // these two give access to the store (now managed by super-parent Provider)
   // now, accessible to each sub component
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(({filter, anecdotes}) => {
+    if (filter === 'ALL') return anecdotes
+    else {
+      const regExp = new RegExp(`${filter}`, 'iu')
+      const filteredAnecdotes = anecdotes.filter(a => a.content.match(regExp))
+      return filteredAnecdotes
+    }
+  })
   
   return (
     <>
