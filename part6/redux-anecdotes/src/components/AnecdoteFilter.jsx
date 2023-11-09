@@ -1,4 +1,4 @@
-import { filterChange } from '../reducers/filterReducer'
+// import { filterReducer } from '../reducers/filterReducer'
 import { useDispatch } from 'react-redux'
 
 const AnecdoteFilter = () => {
@@ -6,12 +6,12 @@ const AnecdoteFilter = () => {
 
   return (
     <>
-      <label htmlFor="filter-output">filter</label>
+      <label htmlFor="filter-input">filter</label>
       <input
         type="text"
         placeholder="filter..."
         id="filter-input"
-        onChange={e => dispatch(filterChange(e.target.value))}
+        onChange={e => dispatch({ type: 'filter/filterReducer', payload: e.target.value })}
       ></input>
     </>
   )
