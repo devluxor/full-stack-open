@@ -68,3 +68,22 @@ A reducer state must be composed of immutable objects. If there is a change in t
 
 ## Uncontrolled form
 
+If we have not bound the state of the form fields to the state of the App component, React calls this kind of form **uncontrolled**.
+
+> Uncontrolled forms have certain limitations (for example, dynamic error messages or disabling the submit button based on input are not possible).
+
+## Action creators
+
+React components don't need to know the Redux action types and forms. We should separate creating actions into separate functions:
+
+Functions that create actions are called action creators.
+
+## Forwarding Redux Store to various components: React-Redux
+
+We should separate App into its module.
+
+How can the App access the store after the move? And more broadly, when a component is composed of many smaller components, there must be a way for all of the components to access the store. There are multiple ways to share the Redux store with components. First, we will look into the newest, and possibly the easiest way is using the hooks API of the react-redux library.
+
+## Presentational components:
+
+This components are very simple, unaware that the event handler they get as props dispatches an action. Usually they render a single element in a list of elements, for instance.
