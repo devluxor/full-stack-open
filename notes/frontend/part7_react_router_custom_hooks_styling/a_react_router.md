@@ -1,6 +1,5 @@
 # React Router
 
-
 ## React Router
 
 React has the React Router library which provides an excellent solution for managing navigation in a React application.
