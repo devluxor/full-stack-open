@@ -30,6 +30,84 @@ React's built-in Context API provides a solution for us. React's context is a ki
 
 The context is created with React's hook createContext.
 
+
+### tricks:
+
+there are components that only use one of the two values returned by `useContext`: Some components only use the state value, others may just need the dispatch function. In that case, we can write two helpers that return only the needed value (custom hooks). For instance, in the file that defines the context:
+
+```js
+const CounterContext = createContext()
+
+// ...
+
+export const useCounterValue = () => {
+  const counterAndDispatch = useContext(CounterContext)
+  return counterAndDispatch[0]
+}
+
+export const useCounterDispatch = () => {
+  const counterAndDispatch = useContext(CounterContext)
+  return counterAndDispatch[1]
+}
+
+// ...
+```
+
+if the component just needs the dispatch function to change some data, we can write helpers that return another function with the needed dispatch function in its closure. For example:
+
+```js
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET":
+        return action.payload
+    case "CLEAR":
+        return null
+    default:
+        return state
+  }
+}
+
+// ...
+
+export const useNotify = () => {
+  const valueAndDispatch = useContext(NotificationContext)
+  const dispatch = valueAndDispatch[1]
+  return (payload) => {
+    dispatch({ type: 'SET', payload})
+    setTimeout(() => {
+      dispatch({ type: 'CLEAR' })
+    }, 5000)
+  } 
+}
+```
+
+Use:
+
+```js
+import { useNotify } from '../NotificationContext'
+
+const AnecdoteForm = () => {
+  const queryClient = useQueryClient()
+  // useNotify returns our function with the dispatch in its closure
+  const notifyWith = useNotify()
+
+  const doSomeAction = () => {
+    // action
+
+    // this function will be invoked with this
+    // string argument along the dispatch function,
+    // in this case, for a notification system
+    notifyWith(`anecdote '${content}' created`)
+  }
+  // ...
+}
+// ...
+```
+
+
+
+
+
 ## Which state management solution to choose?
 
 In chapters 1-5, all state management of the application was done using React's hook useState. Asynchronous calls to the backend required the use of the useEffect hook in some situations. In principle, nothing else is needed.
