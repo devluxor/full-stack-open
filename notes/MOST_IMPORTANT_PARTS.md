@@ -1,5 +1,12 @@
 # Parts that are especially important are:
 
+## Focus on React and Express fundamentals
+
+- Basic Concepts
+- Project structure
+- Basic hooks
+- Techniques and Patterns
+
 ## Part 1 (React Fundamentals)
 
 - 1c: Component State, event handlers

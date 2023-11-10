@@ -216,3 +216,81 @@ JavaScripts basics (special attention to pseudo-classes, constructors, etc.)
 - Creating new notes
 - Saving the token to the browser's local storage
 - A note on using local storage
+
+### b: props.children and proptypes
+
+Displaying the login form only when appropriate
+The components children, aka. props.children
+State of the forms
+References to components with ref
+One point about components
+The updated full stack developer's oath
+PropTypes
+ESlint
+
+### c: Testing React Apps
+
+Rendering the component for tests
+Test file location
+Searching for content in a component
+Debugging tests
+Clicking buttons in tests
+Tests for the Togglable component
+Testing the forms
+About finding the elements
+Test coverage
+Frontend integration tests
+Snapshot testing
+
+### d: End to End testing
+
+Cypress
+Writing to a form
+Testing new note form
+Controlling the state of the database
+Failed login test
+Bypassing the UI
+Changing the importance of a note
+Running and debugging the tests
+
+## Part 6: Advanced State Management
+
+### a: Flux Arquitecture and Redux
+
+Flux-architecture
+Redux
+A note about the use of createStore
+Redux-notes
+Pure functions, immutable
+Array spread syntax
+Uncontrolled form
+Action creators
+Forwarding Redux Store to various components
+More components
+
+### b: Many Reducers
+
+Store with complex state
+Combined reducers
+Finishing the filters
+Redux Toolkit
+Redux Toolkit and console.log
+Redux DevTools
+
+### c: Communicating ewith the server in a Redux application
+
+Getting data from the backend
+Sending data to the backend
+Asynchronous actions and Redux thunk
+
+### d: React Query, useReducer and the context
+
+Synchronizing data to the server using React Query
+Optimizing the performance
+useReducer
+Using context for passing the state to components
+Defining the counter context in a separate file
+Which state management solution to choose?
+
+## Part 7: React Router, custom hooks, styling app with CSS and webpack
+
