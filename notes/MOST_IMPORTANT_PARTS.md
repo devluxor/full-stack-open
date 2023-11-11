@@ -26,4 +26,7 @@
 
 ## Part 7 (React router, custom hooks, styling app with CSS and webpack)
 
+-7a: React Router
+-7b: Custom Hooks
+
 ## Part 9 (Typescript)
