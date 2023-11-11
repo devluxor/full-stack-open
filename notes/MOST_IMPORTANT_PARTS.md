@@ -6,6 +6,16 @@
 - Project structure
 - Basic hooks
 - Techniques and Patterns
+- (becoming comfortable with the `useState` and `useEffect` hooks)
+
+https://roadmap.sh/react (use this roadmap (+ official doc.) to make your own notes)
+
+## Read these articles:
+
+<https://dmitripavlutin.com/react-context-and-usecontext/>
+<https://dmitripavlutin.com/react-usereducer/>
+<https://dmitripavlutin.com/dont-overuse-react-usecallback/>
+<https://dmitripavlutin.com/react-useeffect-explanation/>
 
 ## Part 1 (React Fundamentals)
 
@@ -30,3 +40,4 @@
 -7b: Custom Hooks
 
 ## Part 9 (Typescript)
+
