@@ -37,6 +37,31 @@ Redux is a state management library for JavaScript applications, commonly used w
   )
   ```
 
+  - The store could be complex, like an object with one property with a collection as value and other as a _pseudo-global variable_ to determine, for instance, what elements of that collection are shown, in the function passed to `useSelector`:
+
+  ```js
+  {
+    notes: [
+      { content: 'reducer defines how redux store works', important: true, id: 1},
+      { content: 'state of store can contain any data', important: false, id: 2}
+    ],
+    filter: 'IMPORTANT'
+  }
+  ```
+
+  And we could have a reducer to set the filter based on actions dispatched:
+
+  ```js
+  const filterReducer = (state = 'ALL', action) => {
+    switch (action.type) {
+      case 'SET_FILTER':
+        return action.payload
+      default:
+        return state
+    }
+  }
+  ```
+
   - Each component can access the notes stored in the store with the `useSelector`-hook of the `react-redux` library. `useSelector` receives a function as a parameter. The function either searches for or selects data from the Redux store:
 
   ```js
@@ -114,6 +139,10 @@ Redux is a state management library for JavaScript applications, commonly used w
 
     - We can use the library `deep-freeze`, which can be used to ensure that the reducer has been correctly defined as an immutable function.
 
+    - As your app grows more complex, you'll want to split your reducing function into separate functions, each managing independent parts of the state.
+
+    - The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to createStore.
+
 4. **Dispatch:**
    - To update the state, you dispatch an action to the store using the `dispatch` method. It does it with the returned function from the `useDispatch` hook:
 
@@ -142,3 +171,98 @@ Redux is a state management library for JavaScript applications, commonly used w
       console.log(storeNow)
     })
     ```
+
+## Redux Toolkit
+
+Redux Toolkit is a library that solves these common Redux-related problems. The library for example greatly simplifies the configuration of the Redux store and offers a large variety of tools to ease state management.
+
+With Redux Toolkit, you don't need to create action types, action creators, or use the combineReducers function manually. The toolkit abstracts away many of the boilerplate tasks associated with Redux, making it easier to write and maintain your Redux code.
+
+Install with:
+
+```sh
+npm install @reduxjs/toolkit
+```
+
+Instead of Redux's `createStore` function, we can create the store using Redux Toolkit's `configureStore` function. This function has many additional benefits such as the effortless integration of development tools and many commonly used libraries without the need for additional configuration.
+
+
+
+`main.jsx`:
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+
+import { configureStore } from '@reduxjs/toolkit'
+
+// ...
+
+const store = configureStore({
+  reducer: {
+    notes: noteReducer,
+    filter: filterReducer
+  }
+})
+
+// ...
+```
+
+With Redux Toolkit, we can easily create reducer and related action creators using the `createSlice` function:
+
+```js
+import { createSlice } from '@reduxjs/toolkit'
+
+// ...
+
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState: [/* initial state here */],
+  reducers: {
+    createNote(state, action) {
+      const content = action.payload
+      state.push({
+        content,
+        id: generateId(),
+      })
+    },
+    otherReducer(state,action) {
+
+    },
+    // ...
+  },
+})
+```
+
+The `createSlice` function's `name` parameter defines the prefix which is used in the action's type values. For example, the `createNote` actions defined later will have the type value of `notes/createNote`. It is a good practice to give the parameter a value which is unique among the reducers. This way there won't be unexpected collisions between the application's action type values. 
+
+The `initialState` parameter defines the reducer's initial state. 
+
+The `reducers` parameter takes a reducer itself as an object, of which functions handle state changes caused by certain actions. Note that the `action.payload` in the function contains the argument provided by calling the action creator:
+
+```js
+dispatch(createNote('Redux Toolkit is awesome!'))
+```
+
+```js
+dispatch({ type: 'notes/createNote', payload: 'Redux Toolkit is awesome!' })
+```
+
+Note that, thanks to the Immer library used by Redux toolkit, it is safe to mutate the state argument, since Immer uses the mutated state to produce a new, immutable state and thus the state changes remain immutable. Nevertheless mutating the state will often come in handy especially when a complex state needs to be updated.
+
+The `createSlice` function returns an object containing the reducer as well as the action creators defined by the reducers parameter. The reducer can be accessed by the noteSlice.reducer property, whereas the action creators by the noteSlice.actions property. We can produce the file's exports in the following way:
+
+```js
+const noteSlice = createSlice(/* ... */)
+
+
+export const { createNote, toggleImportanceOf } = noteSlice.actions
+export default noteSlice.reducer
+```
+
+### Asynchronous actions and Redux thunk
+
+Redux Thunk is a middleware for Redux that enables asynchronous logic to be handled in Redux applications. In a typical Redux application, actions are plain JavaScript objects that represent events or changes in state, and they are handled by reducers synchronously. However, in some cases, you might need to perform asynchronous operations, such as making API calls, before dispatching an action.
+
+Redux Thunk allows action creators to return functions instead of plain action objects. These functions, known as thunks, have the ability to dispatch actions and perform asynchronous operations. Thunks receive the `dispatch` and `getState` functions as arguments, giving them access to the Redux store and the ability to dispatch multiple actions.
