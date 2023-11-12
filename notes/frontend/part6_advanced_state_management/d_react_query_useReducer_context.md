@@ -104,10 +104,6 @@ const AnecdoteForm = () => {
 // ...
 ```
 
-
-
-
-
 ## Which state management solution to choose?
 
 In chapters 1-5, all state management of the application was done using React's hook useState. Asynchronous calls to the backend required the use of the useEffect hook in some situations. In principle, nothing else is needed.

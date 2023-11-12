@@ -76,6 +76,24 @@ Redux is a state management library for JavaScript applications, commonly used w
 
   - Usually, selector functions are a bit more interesting and return only selected parts of the contents of the Redux store, or a mapped version of the data, for example.
 
+  - It's a good idea to move the code related to the creation of the Redux store into its own, store.js file. For example:
+
+  ```js
+  import { configureStore } from '@reduxjs/toolkit'
+
+  import noteReducer from './reducers/noteReducer'
+  import filterReducer from './reducers/filterReducer'
+
+  const store = configureStore({
+    reducer: {
+      notes: noteReducer,
+      filter: filterReducer
+    }
+  })
+
+  export default store
+  ```
+
 2. **Actions:**
    - Actions are plain JavaScript objects that represent events or user interactions. They describe what happened in your application.
    - Actions must have a `type` property indicating the type of action being performed. If there is data involved with the action, other fields can be declared as needed. The general convention is that actions have exactly two fields, type telling the type and payload containing the data included with the Action.
@@ -265,4 +283,148 @@ export default noteSlice.reducer
 
 Redux Thunk is a middleware for Redux that enables asynchronous logic to be handled in Redux applications. In a typical Redux application, actions are plain JavaScript objects that represent events or changes in state, and they are handled by reducers synchronously. However, in some cases, you might need to perform asynchronous operations, such as making API calls, before dispatching an action.
 
-Redux Thunk allows action creators to return functions instead of plain action objects. These functions, known as thunks, have the ability to dispatch actions and perform asynchronous operations. Thunks receive the `dispatch` and `getState` functions as arguments, giving them access to the Redux store and the ability to dispatch multiple actions.
+Redux Thunk allows action creators to return functions instead of plain action objects. These functions, known as **thunks**, have the ability to dispatch actions and perform asynchronous operations. Thunks receive the `dispatch` and `getState` functions as arguments, giving them access to the Redux store and the ability to dispatch multiple actions.
+
+#### Example:
+
+Having a `./services/notes.js` (API services)
+
+```js
+const baseUrl = 'http://localhost:3001/notes'
+
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
+}
+
+
+const createNew = async (content) => {
+  const object = { content, important: false }
+  const response = await axios.post(baseUrl, object) // async POST request
+  return response.data // returns data when response received
+}
+
+export default {
+  getAll,
+
+  createNew,
+}
+```
+
+It is not great that the communication with the server happens inside the functions of the components. It would be better if the communication could be abstracted away from the components so that they don't have to do anything else but call the appropriate action creator.
+
+For examples, the main component App could initialize the state of the application as follows:
+
+```js
+const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(initializeNotes()) // !
+  }, []) 
+
+  // ...
+}
+```
+
+and the NewNote component would create a new note as follows:
+
+```js
+const NewNote = () => {
+  const dispatch = useDispatch()
+  
+  const addNote = async (event) => {
+    event.preventDefault()
+    const content = event.target.note.value
+    event.target.note.value = ''
+    dispatch(createNote(content)) // !
+  }
+
+  // ...
+}
+```
+
+In this implementation, both components would dispatch an action without the need to know about the communication between the server that happens behind the scenes (separation of concerns). These kinds of async actions can be implemented using the Redux Thunk library. The use of the library doesn't need any additional configuration or even installation when the Redux store is created using the Redux Toolkit's `configureStore` function.
+
+With Redux Thunk it is possible to implement action creators that return a function instead of an object. The function receives Redux store's `dispatch` and `getState` methods as parameters. This allows for creating asynchronous action creators, which:
+
+1. First wait for the completion of a certain asynchronous operation 
+2. then, after that, dispatch some action, which changes the store's state.
+
+So, in the `./reducers/noteReducer.js` file we can define an action creator `initializeNotes` which initializes the notes based on the data received from the server:
+
+```js
+// ...
+
+import noteService from '../services/notes'
+
+const noteSlice = createSlice(/* ... */)
+
+export const { createNote, toggleImportanceOf, setNotes, appendNote } = noteSlice.actions
+
+export const initializeNotes = () => { 
+  return async dispatch => {
+    const notes = await noteService.getAll()
+    dispatch(setNotes(notes))
+  }
+}
+// the return value is a function that:
+//    fetches notes from the server
+//    dispatches an action to set the initial notes:
+//        one reducer is:
+//                        setNotes(state, action) {
+//                          return action.payload
+//                        }
+//        the payload of the action is an array of notes received
+//        from the getAll method.
+//        The return value of the reducer directly replaces the state with this array
+
+export default noteSlice.reducer
+```
+
+See the App component: The solution is elegant. The initialization logic for the notes has been completely separated from the React component.
+
+We can do the same for the creation of a new note:
+
+```js
+// ...
+import noteService from '../services/notes'
+
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState: [],
+  reducers: {
+    toggleImportanceOf(state, action) {
+      // ...
+    },
+    appendNote(state, action) {
+      state.push(action.payload)
+    },
+    setNotes(state, action) {
+      return action.payload
+    }
+    // createNote definition removed from here!
+  },
+})
+
+
+export const { toggleImportanceOf, appendNote, setNotes } = noteSlice.actions
+
+export const initializeNotes = () => {
+  // ...
+}
+
+
+export const createNote = content => {
+  return async dispatch => {
+    const newNote = await noteService.createNew(content)
+    dispatch(appendNote(newNote))
+  }
+}
+
+export default noteSlice.reducer
+```
+
+The principle here is the same: first, an asynchronous operation is executed, then, the action changing the state of the store is dispatched.
+
+And the NewComponent is simplified as shown three examples before.
