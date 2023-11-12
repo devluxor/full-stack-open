@@ -1,0 +1,32 @@
+{
+  "name": "bloglist",
+  "version": "1.0.0",
+  "description": "part 4 exercises",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "build:ui": "rm -rf dist && cd ../frontend-bloglist && npm run build && cp -r dist ../backend-bloglist",
+    "start:test": "NODE_ENV=test node index.js",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy"
+  },
+  "author": "Lucas Sorribes",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
+    "morgan": "^1.10.0"
+  }
+}

@@ -6,11 +6,11 @@ Already years ago Facebook developed the Flux-architecture to make state managem
 
 When an action changes the state of the store, the views are rerendered:
 
-![](https://fullstackopen.com/static/165b40470776ac449f8b9604d4828004/5a190/flux1.png)
+![Flux-architecture](https://fullstackopen.com/static/165b40470776ac449f8b9604d4828004/5a190/flux1.png)
 
 If some action on the application, for example pushing a button, causes the need to change the state, the change is made with an action. This causes re-rendering the view (a React component) again:
 
-![](https://fullstackopen.com/static/7bf90479b6757c7af3b9a9f0e7f19a64/5a190/flux2.png)
+![Flux-architecture-action](https://fullstackopen.com/static/7bf90479b6757c7af3b9a9f0e7f19a64/5a190/flux2.png)
 
 Flux offers a standard way for how and where the application's state is kept and how it is modified.
 
@@ -82,7 +82,7 @@ Functions that create actions are called action creators.
 
 We should separate App into its module.
 
-How can the App access the store after the move? And more broadly, when a component is composed of many smaller components, there must be a way for all of the components to access the store. There are multiple ways to share the Redux store with components. First, we will look into the newest, and possibly the easiest way is using the hooks API of the react-redux library.
+How can the App access the store after the move? And more broadly, when a component is composed of many smaller components, there must be a way for all the components to access the store. There are multiple ways to share the Redux store with components. First, we will look into the newest, and possibly the easiest way is using the hooks API of the react-redux library.
 
 ## Presentational components:
 
