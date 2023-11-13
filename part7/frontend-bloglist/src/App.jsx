@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -6,13 +7,17 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import AddBlogForm from './components/AddBlogForm'
 import Toggable from './components/Toggable'
+import Notification from './components/Notification'
+
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
 
   const blogFormRef = useRef()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -45,10 +50,7 @@ const App = () => {
   }
 
   const displayNotification = (notification, delay = 4000) => {
-    setNotification(notification)
-    setTimeout(() => {
-      setNotification(null)
-    }, delay)
+    dispatch(setNotification(notification, delay))
   }
 
   const handleLogout = () => {
@@ -132,8 +134,9 @@ const App = () => {
   return (
     <div>
       <Header />
-      <Notification notification={notification} />
+      <Notification />
       {user ? loggedUserUI() : loginForm()}
+      <Footer />
     </div>
   )
 }
@@ -142,14 +145,8 @@ const Header = () => {
   return <h2>Bloglist</h2>
 }
 
-const Notification = ({ notification }) => {
-  if (!notification) return
-
-  return (
-    <div className={`notification ${notification.type}`}>
-      {notification.message}
-    </div>
-  )
+const Footer = () => {
+  return <h2>Lucas Sorribes 2023</h2>
 }
 
 export default App
