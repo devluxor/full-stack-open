@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 const BlogList = ({ likeBlog, deleteBlog, user }) => {
-  const blogs = useSelector(({blogs}) => {
-    return blogs
-  })
+  const blogs = useSelector(({blogs}) => blogs)
 
   if (!blogs) return
 
@@ -62,15 +60,15 @@ const BlogDetails = ({ blog, visible, likeBlog, deleteBlog, user }) => {
   const deleteVisible = creatorId === user.id
 
   const like = async () => {
-    blog.likes += 1
+    // blog.likes += 1
     await likeBlog(blog)
     setLikes(likes + 1)
   }
 
   const delBlog = async () => {
-    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-      await deleteBlog(blog)
-    }
+    // if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+    // }
+    await deleteBlog(blog)
   }
 
   if (!visible) return

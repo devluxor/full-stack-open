@@ -11,11 +11,15 @@ import Notification from './components/Notification'
 
 import { setNotification } from './reducers/notificationReducer'
 
-import { initializeBlogs, addBlog as createBlog } from './reducers/blogsReducer'
+import { 
+  initializeBlogs, 
+  createBlog, 
+  deleteBlog as removeBlog,
+  addLikeBlog as addLike
+} from './reducers/blogsReducer'
 
 const App = () => {
   const blogs = useSelector(({blogs}) => blogs)
-  // const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
@@ -77,9 +81,8 @@ const App = () => {
           <AddBlogForm addBlog={addBlog} />
         </Toggable>
         <BlogList
-          // blogs={blogs}
-          // likeBlog={likeBlog}
-          // deleteBlog={deleteBlog}
+          likeBlog={likeBlog}
+          deleteBlog={deleteBlog}
           user={user}
         />
       </>
@@ -103,35 +106,40 @@ const App = () => {
     }
   }
 
-  // const likeBlog = async (blog) => {
-  //   try {
-  //     await blogService.updateBlog(blog)
-  //   } catch (e) {
-  //     throw Error(e)
-  //   }
-  // }
+  const likeBlog = async (blog) => {
 
-  // const deleteBlog = async (blog) => {
-  //   try {
-  //     await blogService.deleteBlog(blog)
-  //     const newBloglist = filterDeleted(blog.id || blog._id)
-  //     const sorted = sortByLikes(newBloglist)
-  //     setBlogs(sorted)
-  //   } catch (e) {
-  //     throw Error(e)
-  //   }
-  // }
+    try {
+      // await blogService.updateBlog(blog)
+      dispatch(addLike(blog))
+    } catch (e) {
+  
+      throw Error(e)
+    }
+  }
+
+  const deleteBlog = async (blog) => {
+    try {
+      // await blogService.deleteBlog(blog)
+      // const newBloglist = filterDeleted(blog.id)
+      // const sorted = sortByLikes(newBloglist)
+      // setBlogs(sorted)
+      dispatch(removeBlog(blog))
+    } catch (e) {
+      throw Error(e)
+    }
+  }
 
   // const filterDeleted = (idToDelete) => {
   //   return blogs.filter((blog) => {
-  //     const blogId = blog.id || blog._id
+  //     const blogId = blog.id
   //     return blogId !== idToDelete
   //   })
   // }
 
   // in decreasing order of likes
   const sortByLikes = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes)
+    return [...blogs].sort((a, b) => b.likes - a.likes)
+    // return blogs
   }
 
   return (

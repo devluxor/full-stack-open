@@ -24,8 +24,10 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
+  const {_id, ...toSend} = savedBlog._doc
+  toSend.id = savedBlog._doc._id  
   response.status(201).json({
-    ...savedBlog._doc,
+    ...toSend,
     username: user.username
   })
 })
@@ -50,7 +52,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   }
   
   await blog.deleteOne()
-  response.status(204).end()
+  response.status(204).json()
 })
 
 blogsRouter.get('/clearall', async (request, response) => {
