@@ -10,6 +10,7 @@ import Toggable from './components/Toggable'
 import Notification from './components/Notification'
 
 import { setNotification } from './reducers/notificationReducer'
+import { setUser, clearUser, logUser } from './reducers/userReducer'
 
 import { 
   initializeBlogs, 
@@ -18,9 +19,11 @@ import {
   addLikeBlog as addLike
 } from './reducers/blogsReducer'
 
+
 const App = () => {
   const blogs = useSelector(({blogs}) => blogs)
-  const [user, setUser] = useState(null)
+  const user = useSelector(({user}) => user )
+
 
   const blogFormRef = useRef()
 
@@ -36,21 +39,15 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const loginUser = async (username, password) => {
     try {
-      const user = await loginService.login({ username, password })
-
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-
-      blogService.setToken(user.token)
-      setUser(user)
-      return true
-    } catch (exception) {
+      await dispatch(logUser({username, password}))
+    } catch {
       displayNotification({ type: 'fail', message: 'Wrong credentials' })
     }
   }
@@ -60,8 +57,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
-    window.localStorage.clear()
+    dispatch(clearUser())
   }
 
   const loginForm = () => {
