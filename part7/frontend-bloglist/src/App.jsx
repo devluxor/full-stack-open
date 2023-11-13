@@ -9,6 +9,7 @@ import Toggable from './components/Toggable'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import UserDetails from './components/UserDetails'
+import Navbar from './components/Navbar'
 
 import userService from './services/users'
 import { setUser, clearUser } from './reducers/userReducer'
@@ -85,19 +86,7 @@ const App = () => {
 const Header = () => {
   return <h2>Bloglist</h2>
 }
-const padding = {
-  padding: 5
-}
-const Navbar = ({ user, handleLogout }) => {
-  return (
-    <div>
-      <Link style={padding} to="/">home</Link>
-      <Link style={padding} to="/users">users</Link>
-      <p style={{ display: 'inline-block' }}>{user.name} logged in</p>
-      <button style={{ display: 'inline-block' }} onClick={handleLogout}>logout</button>
-    </div>
-  )
-}
+
 
 const Footer = () => {
   return <h5>Lucas Sorribes 2023</h5>
