@@ -1,6 +1,11 @@
 import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-const BlogList = ({ blogs, likeBlog, deleteBlog, user }) => {
+const BlogList = ({ likeBlog, deleteBlog, user }) => {
+  const blogs = useSelector(({blogs}) => {
+    return blogs
+  })
+
   if (!blogs) return
 
   return (

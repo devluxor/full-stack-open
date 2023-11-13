@@ -267,7 +267,7 @@ dispatch(createNote('Redux Toolkit is awesome!'))
 dispatch({ type: 'notes/createNote', payload: 'Redux Toolkit is awesome!' })
 ```
 
-Note that, thanks to the Immer library used by Redux toolkit, it is safe to mutate the state argument, since Immer uses the mutated state to produce a new, immutable state and thus the state changes remain immutable. Nevertheless mutating the state will often come in handy especially when a complex state needs to be updated.
+> Note that, thanks to the Immer library used by Redux toolkit, it is safe to mutate the state argument, since Immer uses the mutated state to produce a new, immutable state and thus the state changes remain immutable. Nevertheless mutating the state will often come in handy especially when a complex state needs to be updated.
 
 The `createSlice` function returns an object containing the reducer as well as the action creators defined by the reducers parameter. The reducer can be accessed by the noteSlice.reducer property, whereas the action creators by the noteSlice.actions property. We can produce the file's exports in the following way:
 

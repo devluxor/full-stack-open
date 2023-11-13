@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,8 +11,11 @@ import Notification from './components/Notification'
 
 import { setNotification } from './reducers/notificationReducer'
 
+import { initializeBlogs, addBlog as createBlog } from './reducers/blogsReducer'
+
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(({blogs}) => blogs)
+  // const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
@@ -21,10 +24,9 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      const sortedBlogs = sortByLikes(blogs)
-      setBlogs(sortedBlogs)
+      dispatch(initializeBlogs(blogs))
     })
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -75,9 +77,9 @@ const App = () => {
           <AddBlogForm addBlog={addBlog} />
         </Toggable>
         <BlogList
-          blogs={blogs}
-          likeBlog={likeBlog}
-          deleteBlog={deleteBlog}
+          // blogs={blogs}
+          // likeBlog={likeBlog}
+          // deleteBlog={deleteBlog}
           user={user}
         />
       </>
@@ -89,7 +91,8 @@ const App = () => {
       const addedBlog = await blogService.createBlog(newBlog)
       blogFormRef.current.toggleVisibility()
       const sorted = sortByLikes(blogs.concat(addedBlog))
-      setBlogs(sorted)
+      // setBlogs(sorted)
+      dispatch(createBlog(addedBlog))
       displayNotification({
         type: 'success',
         message: `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
@@ -100,31 +103,31 @@ const App = () => {
     }
   }
 
-  const likeBlog = async (blog) => {
-    try {
-      await blogService.updateBlog(blog)
-    } catch (e) {
-      throw Error(e)
-    }
-  }
+  // const likeBlog = async (blog) => {
+  //   try {
+  //     await blogService.updateBlog(blog)
+  //   } catch (e) {
+  //     throw Error(e)
+  //   }
+  // }
 
-  const deleteBlog = async (blog) => {
-    try {
-      await blogService.deleteBlog(blog)
-      const newBloglist = filterDeleted(blog.id || blog._id)
-      const sorted = sortByLikes(newBloglist)
-      setBlogs(sorted)
-    } catch (e) {
-      throw Error(e)
-    }
-  }
+  // const deleteBlog = async (blog) => {
+  //   try {
+  //     await blogService.deleteBlog(blog)
+  //     const newBloglist = filterDeleted(blog.id || blog._id)
+  //     const sorted = sortByLikes(newBloglist)
+  //     setBlogs(sorted)
+  //   } catch (e) {
+  //     throw Error(e)
+  //   }
+  // }
 
-  const filterDeleted = (idToDelete) => {
-    return blogs.filter((blog) => {
-      const blogId = blog.id || blog._id
-      return blogId !== idToDelete
-    })
-  }
+  // const filterDeleted = (idToDelete) => {
+  //   return blogs.filter((blog) => {
+  //     const blogId = blog.id || blog._id
+  //     return blogId !== idToDelete
+  //   })
+  // }
 
   // in decreasing order of likes
   const sortByLikes = (blogs) => {
