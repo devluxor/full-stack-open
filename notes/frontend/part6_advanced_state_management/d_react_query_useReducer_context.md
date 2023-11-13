@@ -7,28 +7,29 @@
 
 React Query is a versatile library that, based on what we have already seen, simplifies the application. Does React Query make more complex state management solutions such as Redux unnecessary? No. React Query can partially replace the state of the application in some cases, but as the documentation states
 
-React Query is a server-state library, responsible for managing asynchronous operations between your server and client
-Redux, etc. are client-state libraries that can be used to store asynchronous data, albeit inefficiently when compared to a tool like React Query
+- React Query is a server-state library, responsible for managing asynchronous operations between your server and client
+- Redux, etc. are client-state libraries that can be used to store asynchronous data, albeit inefficiently when compared to a tool like React Query
+
 So React Query is a library that maintains the server state in the frontend, i.e. acts as a cache for what is stored on the server. React Query simplifies the processing of data on the server, and can in some cases eliminate the need for data on the server to be saved in the frontend state.
 
 Most React applications need not only a way to temporarily store the served data, but also some solution for how the rest of the frontend state (e.g. the state of forms or notifications) is handled.
 
 ## useReducer
 
-So even if the application uses React Query, some kind of solution is usually needed to manage the rest of the frontend state (for example, the state of forms). Quite often, the state created with useState is a sufficient solution. Using Redux is of course possible, but there are other alternatives.
+So even if the application uses React Query, some kind of solution is usually needed to manage the rest of the frontend state (for example, the state of forms). Quite often, the state created with `useState` is a sufficient solution. Using Redux is of course possible, but there are other alternatives.
 
-The hook useReducer provides a mechanism to create a state for an application. The parameter for creating a state is the reducer function that handles state changes, and the initial value of the state:
+The hook `useReducer` provides a mechanism to create a state for an application. The parameter for creating a state is the reducer function that handles state changes, and the initial value of the state:
 
 The reducer function that handles state changes is similar to Redux's reducers, i.e. the function gets as parameters the current state and the action that changes the state. The function returns the new state updated based on the type and possible contents of the action:
 
-The function useReducer returns an array that contains an element to access the current value of the state (first element of the array), and a dispatch function (second element of the array) to change the state:
+The function `useReducer` returns an array that contains an element to access the current value of the state (first element of the array), and a dispatch function (second element of the array) to change the state:
 
 Using context for passing the state to components
 If we want to split the application into several components, one solution would be to pass these as props in the usual way: The solution works, but is not optimal. If the component structure gets complicated, e.g. the dispatcher should be forwarded using props through many components to the components that need it, even though the components in between in the component tree do not need the dispatcher. This phenomenon is called prop drilling.
 
 React's built-in Context API provides a solution for us. React's context is a kind of global state of the application, to which it is possible to give direct access to any component app.  Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props.
 
-The context is created with React's hook createContext.
+The context is created with React's hook `createContext`.
 
 
 ### tricks:
