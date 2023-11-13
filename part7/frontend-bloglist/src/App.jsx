@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import blogService from './services/blogs'
@@ -7,13 +7,18 @@ import LoginForm from './components/LoginForm'
 import AddBlogForm from './components/AddBlogForm'
 import Toggable from './components/Toggable'
 import Notification from './components/Notification'
+import Users from './components/Users'
+import UserDetails from './components/UserDetails'
 
+import userService from './services/users'
 import { setUser, clearUser } from './reducers/userReducer'
 
+import { Link, Route, Routes, useMatch } from 'react-router-dom'
+
 const App = () => {
+  const [users, setUsers] = useState([])
   const user = useSelector(({ user }) => user )
   const blogFormRef = useRef()
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -25,6 +30,10 @@ const App = () => {
     }
   }, [dispatch])
 
+  useEffect(() => {
+    userService.getUsers().then(u => setUsers(u))
+  },[])
+
   const loadLoginForm = () => {
     return (
       <Toggable buttonLabel="log in">
@@ -33,15 +42,29 @@ const App = () => {
     )
   }
 
-  const loadLoggedUserUI = () => {
+
+  const userDetailsMatch = useMatch("/users/:id")
+  const userDetails = userDetailsMatch ?
+    users.find(u => u.id === userDetailsMatch.params.id)
+    : null
+
+  const loadLoggedUser = () => {
     return (
       <>
         <h4>Hello {user.name}</h4>
         <button onClick={handleLogout}>logout</button>
-        <Toggable buttonLabel="new blog" ref={blogFormRef}>
-          <AddBlogForm ref={blogFormRef}/>
-        </Toggable>
-        <BlogList />
+        <Routes>
+          <Route path='/users/:id' element ={<UserDetails userDetails={userDetails} />} />
+          <Route path='/users' element={<Users />}/>
+          <Route path='/' element={
+            <>
+              <Toggable buttonLabel="new blog" ref={blogFormRef}>
+                <AddBlogForm ref={blogFormRef}/>
+              </Toggable>
+              <BlogList />
+            </>
+          }/>
+      </Routes>
       </>
     )
   }
@@ -52,9 +75,10 @@ const App = () => {
 
   return (
     <div>
+      {!user || <Navbar/>}
       <Header />
       <Notification />
-      {user ? loadLoggedUserUI() : loadLoginForm()}
+      {user ? loadLoggedUser() : loadLoginForm()}
       <Footer />
     </div>
   )
@@ -62,6 +86,17 @@ const App = () => {
 
 const Header = () => {
   return <h2>Bloglist</h2>
+}
+const padding = {
+  padding: 5
+}
+const Navbar = () => {
+  return (
+    <div>
+      <Link style={padding} to="/">home</Link>
+      <Link style={padding} to="/users">users</Link>
+    </div>
+  )
 }
 
 const Footer = () => {

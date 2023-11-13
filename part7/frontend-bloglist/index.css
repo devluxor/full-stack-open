@@ -26,3 +26,7 @@ button {
 .delete {
   background-color: blue;
 }
+
+table {
+  margin-top: 15px;
+}
