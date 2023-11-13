@@ -1,0 +1,1 @@
+[Context API vs. Redux: What's the difference? A Post Office Tale](https://medium.com/@yuribett/context-api-vs-redux-whats-the-difference-a-post-office-tale-7793f505b89b#:~:text=For%20simpler%2C%20smaller%20to%20medium,involve%20a%20steep%20learning%20curve.)
