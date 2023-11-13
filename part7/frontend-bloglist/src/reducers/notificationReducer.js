@@ -14,7 +14,7 @@ const notificationSlice = createSlice({
   }
 })
 
-export const setNotification = (notification, delay) => {
+export const setNotification = (notification, delay=4000) => {
 
   return async dispatch => {
     dispatch(set(notification))

@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux'
 
 const Notification = () => {
-  const notification = useSelector(({notification}) => notification )
+  const notification = useSelector(({ notification }) => notification )
 
   if (!notification) return
 

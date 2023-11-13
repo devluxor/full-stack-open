@@ -32,7 +32,7 @@ const createBlog = async (newBlog) => {
 }
 
 const updateBlog = async (blog) => {
-  const blogId = blog.id || blog._id
+  const blogId = blog.id
   try {
     const response = await axios.put(`${baseUrl}/${blogId}`, blog)
     return response.data
@@ -48,7 +48,7 @@ const deleteBlog = async (blog) => {
     },
   }
 
-  const blogId = blog.id || blog._id
+  const blogId = blog.id
   try {
     const response = await axios.delete(`${baseUrl}/${blogId}`, config)
     return response.data

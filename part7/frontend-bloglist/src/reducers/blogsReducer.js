@@ -33,8 +33,12 @@ export const initializeBlogs = () => {
 
 export const createBlog = (object) => {
   return async dispatch => {
-    const blog = await blogService.createNew(object)
-    dispatch(addBlog(blog))
+    try {
+      const blog = await blogService.createBlog(object)
+      dispatch(addBlog(blog))
+    } catch(e) {
+      throw Error(e)
+    }
   }
 }
 
@@ -44,14 +48,6 @@ export const deleteBlog = (object) => {
     dispatch(removeBlog(object))
   }
 }
-
-// export const voteAnecdote = (object) => {
-//   const toVote = { ...object, votes: object.votes + 1 }
-//   return async dispatch => {
-//     const anecdote = await anecdoteService.update(toVote)
-//     dispatch(replaceAnecdote(anecdote))
-//   }
-// }
 
 export const addLikeBlog = (blog) => {
   const toLike = { ...blog, likes: blog.likes + 1 }

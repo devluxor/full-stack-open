@@ -1,8 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { initializeBlogs, addLikeBlog as like, deleteBlog as deleteB } from '../reducers/blogsReducer'
+import blogService from '../services/blogs'
 
-const BlogList = ({ likeBlog, deleteBlog, user }) => {
-  const blogs = useSelector(({blogs}) => blogs)
+const BlogList = () => {
+  const blogs = useSelector(({ blogs }) => blogs)
+  const user = useSelector(({ user }) => user )
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    blogService.getAll().then((blogs) => {
+      dispatch(initializeBlogs(blogs))
+    })
+  }, [dispatch])
 
   if (!blogs) return
 
@@ -13,8 +23,6 @@ const BlogList = ({ likeBlog, deleteBlog, user }) => {
           <Blog
             key={blog.id}
             blog={blog}
-            likeBlog={likeBlog}
-            deleteBlog={deleteBlog}
             user={user}
           />
         )
@@ -54,21 +62,28 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   )
 }
 
-const BlogDetails = ({ blog, visible, likeBlog, deleteBlog, user }) => {
+const BlogDetails = ({ blog, visible, user }) => {
   const [likes, setLikes] = useState(blog.likes)
   const creatorId = blog.user.id || blog.user
   const deleteVisible = creatorId === user.id
+  
+  const dispatch = useDispatch()
 
-  const like = async () => {
-    // blog.likes += 1
-    await likeBlog(blog)
-    setLikes(likes + 1)
+  const likeBlog = async () => {
+    try {
+      await dispatch(like(blog))
+      setLikes(likes + 1)
+    } catch (e) {
+      throw Error(e)
+    }
   }
 
-  const delBlog = async () => {
-    // if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-    // }
-    await deleteBlog(blog)
+  const deleteBlog = async () => {
+    try {
+      await dispatch(deleteB(blog))
+    } catch (e) {
+      throw Error(e)
+    }
   }
 
   if (!visible) return
@@ -77,12 +92,12 @@ const BlogDetails = ({ blog, visible, likeBlog, deleteBlog, user }) => {
     <>
       <p>{blog.url}</p>
       <p style={{ display: 'inline-block' }}>likes {likes}</p>
-      <button className="like" onClick={like}>
+      <button className="like" onClick={likeBlog}>
         like
       </button>
       <p>{blog?.user?.username || blog.username}</p>
       {deleteVisible && (
-        <button className="delete" onClick={delBlog}>
+        <button className="delete" onClick={deleteBlog}>
           delete
         </button>
       )}

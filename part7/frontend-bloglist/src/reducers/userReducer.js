@@ -27,7 +27,7 @@ export const logUser = credentials => {
       dispatch(setUser(user))
       return user
     } catch (e) {
-      throw Error(e.message)
+      throw Error(e)
     }
   }
 }
