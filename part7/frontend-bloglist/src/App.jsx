@@ -51,8 +51,6 @@ const App = () => {
   const loadLoggedUser = () => {
     return (
       <>
-        <h4>Hello {user.name}</h4>
-        <button onClick={handleLogout}>logout</button>
         <Routes>
           <Route path='/users/:id' element ={<UserDetails userDetails={userDetails} />} />
           <Route path='/users' element={<Users />}/>
@@ -75,7 +73,7 @@ const App = () => {
 
   return (
     <div>
-      {!user || <Navbar/>}
+      {!user || <Navbar user={user} handleLogout={handleLogout}/>}
       <Header />
       <Notification />
       {user ? loadLoggedUser() : loadLoginForm()}
@@ -90,11 +88,13 @@ const Header = () => {
 const padding = {
   padding: 5
 }
-const Navbar = () => {
+const Navbar = ({user, handleLogout}) => {
   return (
     <div>
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/users">users</Link>
+      <p style={{display: 'inline-block'}}>{user.name} logged in</p>
+      <button style={{display: 'inline-block'}} onClick={handleLogout}>logout</button>
     </div>
   )
 }
