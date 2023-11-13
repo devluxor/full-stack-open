@@ -66,7 +66,7 @@ const BlogDetails = ({ blog, visible, user }) => {
   const [likes, setLikes] = useState(blog.likes)
   const creatorId = blog.user.id || blog.user
   const deleteVisible = creatorId === user.id
-  
+
   const dispatch = useDispatch()
 
   const likeBlog = async () => {

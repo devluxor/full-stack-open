@@ -43,7 +43,7 @@ const App = () => {
   }
 
 
-  const userDetailsMatch = useMatch("/users/:id")
+  const userDetailsMatch = useMatch('/users/:id')
   const userDetails = userDetailsMatch ?
     users.find(u => u.id === userDetailsMatch.params.id)
     : null
@@ -62,7 +62,7 @@ const App = () => {
               <BlogList />
             </>
           }/>
-      </Routes>
+        </Routes>
       </>
     )
   }
@@ -88,13 +88,13 @@ const Header = () => {
 const padding = {
   padding: 5
 }
-const Navbar = ({user, handleLogout}) => {
+const Navbar = ({ user, handleLogout }) => {
   return (
     <div>
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/users">users</Link>
-      <p style={{display: 'inline-block'}}>{user.name} logged in</p>
-      <button style={{display: 'inline-block'}} onClick={handleLogout}>logout</button>
+      <p style={{ display: 'inline-block' }}>{user.name} logged in</p>
+      <button style={{ display: 'inline-block' }} onClick={handleLogout}>logout</button>
     </div>
   )
 }

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import userService from "../services/users";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react'
+import userService from '../services/users'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
   const [users, setUsers] = useState([])
@@ -28,11 +28,11 @@ const Users = () => {
   )
 }
 
-const User = ({user}) => {
+const User = ({ user }) => {
   return (
     <tr>
       <td><Link to={`/users/${user.id}`} >{user.name ?? 'Unknown'}</Link></td>
-      <td style={{textAlign: 'right'}}>{user.blogs.length}</td>
+      <td style={{ textAlign: 'right' }}>{user.blogs.length}</td>
     </tr>
   )
 }

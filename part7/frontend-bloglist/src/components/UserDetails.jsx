@@ -1,14 +1,14 @@
-import userService from "../services/users"
-import { useState, useEffect } from "react"
+import userService from '../services/users'
+import { useState, useEffect } from 'react'
 
-const UserDetails = ({userDetails}) => {
+const UserDetails = ({ userDetails }) => {
   const id = userDetails.id
-  
+
   const [user, setUser] = useState(null)
   useEffect(() => {
     userService.getUser(id).then(u => setUser(u))
   },[id])
-  
+
   if (!user) return
 
   return (
