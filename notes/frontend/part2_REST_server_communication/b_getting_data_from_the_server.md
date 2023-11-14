@@ -61,7 +61,7 @@ and make a small addition to the `scripts` part of the `package.json` file:
 2. Create a JSON data file:
 Create a JSON file that will serve as your mock API data source. For example, create a `db.json` file with some sample data in json format:
 
-```json
+```js
 {
   "posts": [
     { "id": 1, "title": "First Post" },

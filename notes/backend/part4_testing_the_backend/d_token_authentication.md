@@ -158,5 +158,3 @@ const userExtractor = async (request, response, next) => {
   next()
 }
 ```
-
-
