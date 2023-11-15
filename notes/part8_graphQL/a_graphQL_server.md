@@ -421,6 +421,12 @@ const resolvers = {
 
 ## Mutations:
 
+Two types of queries:
+
+- Queries
+
+- Mutations
+
 In GraphQL, all operations which cause a change are done with **mutations**. Mutations are described in the schema as the keys of type `Mutation`. A mutation could be adding a new entity (like a Person) or modifying an entity's values.
 
 For example:

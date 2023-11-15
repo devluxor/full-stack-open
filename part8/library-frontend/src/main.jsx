@@ -1,0 +1,24 @@
+import App from './App'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter as Router } from 'react-router-dom'
+
+import {
+  ApolloClient,
+  ApolloProvider, // !
+  InMemoryCache,
+} from '@apollo/client'
+
+// creates a new client object... 
+const client = new ApolloClient({
+  uri: 'http://localhost:4000',
+  cache: new InMemoryCache(),
+})
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <ApolloProvider client={client}>
+    <Router>
+      <App />
+    </Router>
+  </ApolloProvider>
+)
