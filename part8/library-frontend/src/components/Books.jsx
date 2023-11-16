@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client"
 import { ALL_BOOKS } from "../queries"
-import Book from "./Book"
 import BookList from "./Booklist"
 import { useEffect, useState } from "react"
 import Select from 'react-select';
