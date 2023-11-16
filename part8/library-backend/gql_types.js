@@ -64,6 +64,10 @@ const typeDefs = `
       username: String!
       password: String!
     ): Token
+
+    clear(
+      a: Int
+    ): Int
   }
 `
 

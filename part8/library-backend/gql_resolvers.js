@@ -27,16 +27,21 @@ const resolvers = {
       else if (author && !genre) return books.filter(b => isAuthor(b, author))
       else if (!author && genre) return books.filter(b => hasGenres(b, genre))
 
-      return books.filter(b => {
+      const result = books.filter(b => {
         return isAuthor(b, author) && hasGenres(b, genre)
       })
+
+      return result
     },
     allAuthors: async () => {
       return Author.find({})
     },
     allUsers: async () => {
       return User.find({})
-    }
+    },
+    me: async (root, args, {currentUser}) => {
+      return currentUser
+    },
   },
   Author: {
     bookCount: async (root) => {
@@ -47,7 +52,6 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, {currentUser}) => {
-      const user = await User.findOne({ username: currentUser })
       if (!currentUser) return null
       
       const author = await Author.findOne({name: args.author})
@@ -75,7 +79,6 @@ const resolvers = {
       return newBook
     },
     addAuthor: async (root, args, {currentUser}) => {
-      const user = await User.findOne({ username: currentUser })
       if (!currentUser) return null
       
       const newAuthor = new Author({...args})
@@ -94,7 +97,6 @@ const resolvers = {
 
     },
     editAuthor: async (root, args, {currentUser}) => {
-      const user = await User.findOne({ username: currentUser })
       if (!currentUser) return null
       
       const author = await Author.findOne({name: args.name})
@@ -153,9 +155,14 @@ const resolvers = {
       const userForToken = {
         username: user.username,
         id: user._id,
+        favoriteGenre: user.favoriteGenre
       }
-  
+      
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+    clear: async (root, args) => {
+      await Book.deleteMany()
+      return 1
     }
   }
 }

@@ -16,20 +16,28 @@ const NewBook = () => {
       {query: ALL_BOOKS}
     ],
     onError: (error) => {
-      const messages = error.graphQLErrors.map(e => e.message).join('\n')
-      console.log(messages)
-    }
+      console.log(error)
+    },
   })
 
   const submit = async (event) => {
     event.preventDefault()
-    addBook({ variables: { title, author, published: Number(published), genres}})
+
+    const result = await addBook(
+      { variables: { title, author, published: Number(published), genres}}
+    )
+
+    if (!result.data) {
+      console.log(result)
+      return
+    }
 
     setTitle('')
     setPublished('')
     setAuthor('')
     setGenres([])
     setGenre('')
+
     navigate('/')
   }
 

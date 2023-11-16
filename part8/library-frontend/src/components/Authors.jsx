@@ -5,14 +5,9 @@ import Author from './Author'
 import SetBirthForm from './SetBirthForm'
 
 
-const Authors = () => {
-  // if (!props.show) {
-  //   return null
-  // }
-
+const Authors = ({userLoggedIn}) => {
   const result = useQuery(ALL_AUTHORS)
 
-  // const authors = []
   if (result.loading) {
     return <div>loading...</div>
   }
@@ -32,7 +27,7 @@ const Authors = () => {
           </tbody>
         </table>
       </div>
-      <SetBirthForm authors={result.data.allAuthors}/>
+      {userLoggedIn ? <SetBirthForm authors={result.data.allAuthors}/> : null}
     </>
   )
 }

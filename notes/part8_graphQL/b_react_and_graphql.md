@@ -316,7 +316,53 @@ If you want to do multiple queries, you can pass multiple objects inside `refetc
   })
 ```
 
-There are other ways to update the cache.
+### A better way to update the cache
+
+The last approach is pretty good, the drawback being that the query is always rerun with any updates. It is possible to optimize the solution by handling updating the cache ourselves. This is done by defining a suitable update callback for the mutation, which Apollo runs after the mutation:
+
+```js
+const PersonForm = ({ setError }) => {
+  // ...
+
+  const [ createPerson ] = useMutation(CREATE_PERSON, {
+    onError: (error) => {
+      // ...
+    },
+
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data.addPerson),
+        }
+      })
+    },
+  })
+  // ..
+}  
+```
+
+The callback function is given a reference to the cache (`cache`) and the data returned by the mutation (`response`) as parameters. For example, in our case, this would be the created person.
+
+Using the function `updateQuery` the code updates the query `ALLPERSONS` in the cache by adding the new person to the cached data.
+
+#### From official documentation:
+
+- The `updateQuery` method takes two arguments:
+  - Options parameter that always includes a query or fragment
+  - An update function
+- After the `updateQuery` method fetches data from the cache
+- The update function is called, passing it the cached data, `allPersons`in the example.
+- The update function can return a value to _replace_ that data in the cache (the new array returned by `concat` in the example)
+
+### Important remarks about cache
+
+In some situations, the only sensible way to keep the cache up to date is using the `update` callback.
+
+When necessary, it is possible to disable cache for the whole application or single queries by setting the field managing the use of cache, `fetchPolicy` as `no-cache`.
+
+Be diligent with the cache. Old data in the cache can cause hard-to-find bugs. As we know, keeping the cache up to date is very challenging. According to a coder proverb:
+
+> There are only two hard things in Computer Science: cache invalidation and naming things.
 
 ## Separation of queries
 
