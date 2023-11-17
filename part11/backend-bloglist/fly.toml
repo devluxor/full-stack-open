@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for bloglist-luke on 2023-11-17T17:48:21+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "bloglist-luke"
+primary_region = "mad"
+
+[deploy]
+
+[processes]
+  app = "node index.js"
+
+[build]
+  [build.args]
+    NODE_VERSION = "20.8.0"
+
+[env]
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[services]]
+  http_checks = []
+  processes = ["app"]
