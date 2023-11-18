@@ -1,7 +1,0 @@
-# Exercise 11.1
-
-The language of choice for the application is Ruby, and we will use the famous framework Rails. For linting, Ruby project use Rubocop, which has a similar role as JavaScript's ESlint. The most frequently tool for testing Ruby applications is RSpec. For building, we can use Webpacker, which integrates Webpack with Ruby on Rails applications. These tools can and probably will be used in combination of other common ones in the Ruby ecosystem, like Bundler, a gem and dependency manager, or Rake, used for task automation.
-
-There are alternatives to Jenkins and GitHub Actions; examples are Travis CI, CircleCI, GitLab CI/CD, AWS CodePipeline. Travis is easy to set up and configure, and supports a variety of programming languages, and provides a free tier for public repositories on GitHub; AWS CodePipeline, for instance,  enables you to create and visualize your CI/CD pipelines, allowing you to deliver code changes more reliably and rapidly, and it is highly customizable. The choice ultimately depedends on the team's preferences, the technologies used, and the overall workflow and requirements.
-
-For a small sized web application developed by just me, the appropriate choice for the setup would be a clod-based environment. I don't want to be worried about server maintenance or complex configurations, and cloud-based options offer the most simplicity. And, of course, it is cheaper.
