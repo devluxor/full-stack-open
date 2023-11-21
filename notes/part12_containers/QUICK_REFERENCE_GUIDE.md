@@ -7,7 +7,47 @@
 - For managing the Docker containers, there is also a tool called **Docker Compose** that allows one to orchestrate (control) multiple containers at the same time.
 - **Dockerfile** is a simple text file that contains all the instructions for creating an image from a directory. This File is generally in the root directory of the application.
 
-## `run` (aka `container run`)
+## Guide for People In a Rush: TODO
+
+ - What is an Image
+ - What is a container
+ - What is Docker
+
+- We use Docker commands to:
+    - Create images from a project or part or a project (i.e.: frontend and backend)
+    - (Images can be created from other images as bases; for example, we can create a new image based on other image we downloaded, but adding new files.)
+    - Run images: in order to interact with images (images are immutable), we need to _actualize_ them by creating containers from them. (Most of the time, we will work with containers). Then we run the containers (according the instructions given in the `Dockerfile` that we used to create the image)
+    - Interact with containers: we can debug by gaining access to containers during execution. For example, we can run commands on a bash terminal within them.
+ 
+### Basic Containerization Routine
+
+- Define `Dockerfile` for backend
+- Define `Dockerfile` for frontend
+
+(we can define different images for different environments (development, testing, production))
+(we can run, for example, backend outside a container and frontend inside)
+(During development, it can be useful to containerize some parts of the application)
+(It is possible to containerize _every_ part of the app (like frontend, backend, database, auxiliary database, debugger, even more))
+
+- If we want to _orchestrate_ (manage multiple containers at the same time, for example, to define a development or production environment), we use Docker Compose. In this file, each container is defined as a _service_. This tool works thanks to a common `docker-compose.yml` file in which we define which containers will be used for the project: their names, their connections, etc. There will be a common local network between containers ran this way, so they can communicate with themselves, and, at the same time, with other external networks (like Internet)
+
+- Docker compose will by itself create containers from images and run them, according the instructions in the `docker-compose.yml` file. There can be more than one `docker-compose` file for a single project (for example, one for production, other for development, etc.). We use it by simple entering something like `docker compose up` in the same folder where a `docker-compose` is.
+
+- One simple case for orchestrating different containers could be:
+    - One container ran (a process, a service) for the frontend
+    - One container ran (a process, a service) for the backend
+    - Maybe others, like a database or auxiliary databases for caches, etc.
+    - One container ran (a process, a service) for a proxy.
+
+- We execute a docker compose command and these processes are started. When we visit the proxy's external address, we've set up the orchestration in the way he serves us a frontend (a  container running) able to communicate internally with the backend (another container), giving the appearance that it is the proxy who's serving us, while in reality it's all based on an internal orchestration thanks to a `docker-compose` file (and others, for example, `nginx.conf` for the proxy).
+
+- This is very important for deployment (projects are deployed to platforms as images that the server will run).
+
+- Kubernetes is a powerful tool in this field.
+
+## Basic Docker commands
+
+### `run` (aka `container run`)
 
 > Docker runs processes in isolated containers. A container is a process which runs on a host. The host may be local or remote. When an operator executes docker run, the container process that runs is isolated in that it has its own file system, its own networking, and its own isolated process tree separate from the host.
 
@@ -19,27 +59,27 @@ docker container run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
 This tells Docker to create a container from an image, and run a command within it. It can run a container even if the image to run is not downloaded on our device yet. In this case, The Docker daemon will pull the "hello-world" image from the Docker Hub.
 
-### Important flags:
+#### Important flags:
 
 `-it`: make sure we can interact with the container. (Interactive: keep STDIN open; tty: allocate a pseudo-TTY). Add `-a` or `-all` to list containers that have already been exited. `docker container ls` has a shorter alias `docker ps`.
 `--name`: We can give a name to the container
 `-p`: will inform Docker that a port from the host machine should be opened and directed to a port in the container. The format for `-p` is `host-port:application-port`. For example:
 
 ```sh
-docker run -p 3123:3000 APPLICATION_NAME
+docker run -p 3123:3000 IMAGE_NAME
 ```
 
 Other Example:
 
 ```bash
-docker run -it ubuntu bash
+docker run -it IMAGE_NAME bash
 ```
-In this case the last `bash` is the command that will override the default command defined in `CMD` in the `Dockerfile` used to build the image.
 
+In this case the last `bash` is the command that will override the default command defined in `CMD` in the `Dockerfile` used to build the image.
 
 `-rm`: will remove the container after execution
 
-## `start`
+### `start`
 
 Dockers can be referred by its `CONTAINER ID`, by the first characters of its `CONTAINER ID`, or by its given name, like `hopeful_clark` or `throbbing_gristle`
 
@@ -49,12 +89,12 @@ We can start stopped containers with:
 docker start [options] CONTAINER-ID-OR-CONTAINER-NAME
 ```
 
-### Important flags:
+#### Important flags:
 
 
 `-i`: the flag `--interactive` or `-i` makes we are able to interact with the container.
 
-## `kill`
+### `kill`
 
 sends a signal `SIGKILL` to the process that is running the container forcing it to exit, and that causes the container to stop. We can check it's status with `container ls -a`
 
@@ -62,7 +102,7 @@ sends a signal `SIGKILL` to the process that is running the container forcing it
 docker kill container
 ```
 
-## `commit`
+### `commit`
 
 This command
 
@@ -84,11 +124,11 @@ FROM node:16 # the base for the image
 
 WORKDIR /usr/src/app # sets a working directory in the container for our application so we don't interfere with the contents of the image. If the directory doesn't exist in the base image, it will be automatically created.
 
-COPY ./index.js ./index.js #  will copy the file index.js from the host machine to the file with the same name in the image. 
+COPY . . #  will copy the current directory from the host machine to the directory with the same name in the image. It will create a new directory if it does not exist.
 
 COPY --chown=node:node . . 
 
-RUN npm ci --only-production # commands run before the execution of CMD. In Node-based applications, npm ci is better than npm install
+RUN npm ci --only-production # commands run before the execution of CMD. In Node-based applications, npm ci is better than npm install. In development mode, we need to use npm install
 
 ENV DEBUG=true # with Dockerfiles we can use the instruction ENV to set environment variables.
 
@@ -121,6 +161,12 @@ docker build -t fs-hello-world .
 ## directory from which we execute the command.
 ```
 
+- Then we need to run the image with `run`:
+
+```sh
+docker run -p 3000:3000 fs-hello-world
+```
+
 The default command, defined by the `CMD` in the `Dockerfile`, can be overridden if needed. We could e.g. open a bash session to the container and observe its content:
 
 ```sh
@@ -143,9 +189,7 @@ Docker Compose is a tool for defining and running multi-container Docker applica
 
 ### Basics:
 
-Docker Compose is a tool for defining and running multi-container Docker applications. With Docker Compose, you can define a multi-container application in a single file, called `docker-compose.yml`, and use a set of simple commands to create and manage the entire application stack.
-
-1. **Docker Compose YAML File (`docker-compose.yml`):** This file is used to define the services, networks, and volumes that make up your Docker application. It specifies how the containers should be built, configured, and connected.
+1. **(`docker-compose.yml`):** This file is used to define the services, networks, and volumes that make up your Docker application. It specifies how the containers should be built, configured, and connected.
 
    Example `docker-compose.yml` file:
 
@@ -181,9 +225,9 @@ Docker Compose is a tool for defining and running multi-container Docker applica
 
 2. **Service:** A service is a containerized application component defined in the `docker-compose.yml` file. Each service can have its own configuration, such as the Docker image, environment variables, ports to expose, and more.
 
-4. **Environment Variables and Overrides:** Docker Compose allows you to use environment variables in the `docker-compose.yml` file and override them with a separate `.env` file or environment variables defined in the shell.
+3. **Environment Variables and Overrides:** Docker Compose allows you to use environment variables in the `docker-compose.yml` file and override them with a separate `.env` file or environment variables defined in the shell.
 
-5. **Scaling:** You can easily scale services by specifying the desired number of replicas in the `docker-compose.yml` file.
+4. **Scaling:** You can easily scale services by specifying the desired number of replicas in the `docker-compose.yml` file.
 
 Docker Compose simplifies the process of managing complex, multi-container applications, making it easier to develop, test, and deploy applications that consist of multiple interconnected services. It is particularly useful for local development environments and can be a valuable tool in a continuous integration/continuous deployment (CI/CD) pipeline.
 
@@ -203,7 +247,7 @@ Once we have the container running in the background with `docker compose -f doc
 
 ## Binding Mounts
 
-Imagine we need a file to be executed to, for instance, initialize a database with some data. But that file is _outside_ the image `mongo` that created the container with our Mongo database, and we need some way to _get it_ inside the container.
+Imagine we need a file to be executed to, for instance, initialize a database with some data (the mongo image needs to be initialized under certain conditions, among them, the execution of a `.js` file). But that file is _outside_ the image `mongo` that created the container with our Mongo database, and we need some way to _get it_ inside the container.
 
 We have two options: we could 
 
@@ -261,10 +305,10 @@ Example of use case:
 1. A container is running, listening on port `80`. We could shut it down and restart with the `-p` flag to have our browser access it: 
 
 ```sh
-$ docker container stop keen_darwin
-$ docker container rm keen_darwin
+docker container stop keen_darwin
+docker container rm keen_darwin
 
-$ docker container run -d -p 8080:80 nginx
+docker container run -d -p 8080:80 nginx
 ```
 
 2. We access with. Note that the `-it` flag makes us able to interact with the container; the last `bash` overrides the default `CMD` command in the image, starting the bash propmt
@@ -377,8 +421,6 @@ In addition to the `GET`, `SET` and `DEL` operations on keys and values, Redis c
 
 Redis can also be used to implement so called publish-subscribe (or PubSub) pattern that is a asynchronous communication mechanism for distributed software. In this scenario Redis works as a message broker between two or more services. Some of the services are publishing messages by sending those to Redis, that on arrival of a message, informs the parties that have subscribed to those messages.
 
-## Basics of Orchestration
-
 ## Practical case
 
 - Set base files for the app. For example, we could quickly create an example scaffolding with `npx express-generator`. 
@@ -399,6 +441,6 @@ node_modules
 Dockerfile
 ```
 
-Don't forget about including the files and directories used for [bind mounts](#binding-mounts-and-volumes), if any. Also Redis directory `redis_data` if the data persistence is toggled on.
+Don't forget about including the files and directories used for [bind mounts](#binding-mounts-and-volumes), if any. Also, the Redis directory `redis_data` if the data persistence is toggled on.
 
 - [Use `docker` compose to define and manage the containers for our application](#docker-compose).
