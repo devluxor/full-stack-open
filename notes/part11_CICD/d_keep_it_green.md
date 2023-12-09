@@ -12,10 +12,10 @@ Pull requests are a core part of the collaboration process when working on any s
 
 There are several reasons why using pull requests and getting your code reviewed by at least one other person is always a good idea.
 
--   Even a seasoned developer can often overlook some issues in their code: we all know of the tunnel vision effect.
--   A reviewer can have a different perspective and offer a different point of view.
--   After reading through your changes, at least one other developer will be familiar with the changes you've made.
--   Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests.
+- Even a seasoned developer can often overlook some issues in their code: we all know of the tunnel vision effect.
+- A reviewer can have a different perspective and offer a different point of view.
+- After reading through your changes, at least one other developer will be familiar with the changes you've made.
+- Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests.
 
 You can configure your GitHub repository in such a way that pull requests cannot be merged until they are approved.
 
@@ -133,6 +133,5 @@ By pointing to the hash of a specific commit we can be sure that the code we use
 GitHub allows you to set up protected branches. It is important to protect your most important branch that should never be broken: *master*/*main*. In repository settings, you can choose between several levels of protection. We will not go over all of the protection options, you can learn more about them in GitHub documentation. Requiring pull request approval when merging into the main branch is one of the options we mentioned earlier.
 
 From CI point of view, the most important protection is requiring status checks to pass before a PR can be merged into the main branch. This means that if you have set up GitHub Actions to run e.g. linting and testing tasks, then until all the lint errors are fixed and all the tests pass the PR cannot be merged. Because you are the administrator for your repository, you will see an option to override the restriction. However, non-administrators will not have this option.
-
 
 To set up protection for your main branch, navigate to repository "Settings" from the top menu inside the repository. In the left-side menu select "Branches". Click "Add rule" button next to "Branch protection rules". Type a branch name pattern ("master" or "main" will do nicely) and select the protection you would want to set up. At least "Require status checks to pass before merging" is necessary for you to fully utilize the power of GitHub Actions. Under it, you should also check "Require branches to be up to date before merging" and select all of the status checks that should pass before a PR can be merged.

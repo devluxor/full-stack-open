@@ -1,27 +1,5 @@
 # General notes
 
-<!-- ## Topics
-
-### Frontend
-
-- React
-- Modularization
-- Others (vite, build for prod, debugging, etc)
-
-### Backend
-
-- Node
-- Express
-- Databases (MongoDB)
-- Deployment Platform (Fly.io)
-- How to combine front+backend
-- How to work in dev env vs prod
-- How to deploy
-- Others modules and dependencies ()
-- Linting (eslint)
-
-## Parts  -->
-
 ## Part 0: Generals about web apps
 
 - HTTP

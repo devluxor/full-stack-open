@@ -283,7 +283,7 @@ app.use(express.static('public')); // Serve static files from the 'public' direc
 
 ## Morgan
 
-A very common example of middleware is the logger morgan.
+A very common example of middleware is the logger `morgan`.
 
 ## Important
 

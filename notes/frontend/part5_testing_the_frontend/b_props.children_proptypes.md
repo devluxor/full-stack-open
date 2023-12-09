@@ -1,4 +1,4 @@
-# props.children, proptypes
+# `props.children`, `proptypes`
 
 ## The components children, aka. props.children
 
@@ -38,7 +38,7 @@ const Togglable = (props) => {
 
 note the `props.children`. 
 
-The new and interesting part of the code is props.children, which is used for referencing the child components of the component. The child components are the React elements that we define between the opening and closing tags of a component.
+The new and interesting part of the code is `props.children`, which is used for referencing the child components of the component. The child components are the React elements that we define between the opening and closing tags of a component.
 
 This time the children are rendered in the code that is used for rendering the component itself:
 
