@@ -147,6 +147,10 @@ In this case:
 - `push` into `main`: every time a commit is pushed into the `main` branch
 - `pull_request` into `main`, with `types` `opened` and `synchronize`: The workflow will run when a pull request into the `main` branch is opened or updated.
 
+There are many more triggers available. For example, we could create a timed trigger that could run certain workflow every Monday.
+
+See <https://docs.github.com/en/actions/using-workflows/triggering-a-workflow>.
+
 ### `jobs` defines the separate jobs that the workflow will execute.
 
 In this case:
