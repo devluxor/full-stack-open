@@ -74,7 +74,9 @@ This tells Docker to create a container from an image, and run a command within 
 
 #### Important flags:
 
-`-it`: make sure we can interact with the container. (Interactive: keep STDIN open; tty: allocate a pseudo-TTY). Add `-a` or `-all` to list containers that have already been exited. `docker container ls` has a shorter alias `docker ps`.
+`-it`: make sure we can interact with the container. (`-i` for Interactive: keep STDIN open (will instruct to pass the STDIN to the container); `-t` for tty: allocate a pseudo-TTY). 
+
+`-a` or `-all`: add to list containers that have already been exited. `docker container ls` has a shorter alias `docker ps`.
 
 `--name`: We can give a name to the container.
 
