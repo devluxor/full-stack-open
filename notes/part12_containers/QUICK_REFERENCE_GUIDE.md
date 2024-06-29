@@ -62,7 +62,9 @@ This tells Docker to create a container from an image, and run a command within 
 #### Important flags:
 
 `-it`: make sure we can interact with the container. (Interactive: keep STDIN open; tty: allocate a pseudo-TTY). Add `-a` or `-all` to list containers that have already been exited. `docker container ls` has a shorter alias `docker ps`.
-`--name`: We can give a name to the container
+
+`--name`: We can give a name to the container.
+
 `-p`: will inform Docker that a port from the host machine should be opened and directed to a port in the container. The format for `-p` is `host-port:application-port`. For example:
 
 ```sh
@@ -77,7 +79,10 @@ docker run -it IMAGE_NAME bash
 
 In this case the last `bash` is the command that will override the default command defined in `CMD` in the `Dockerfile` used to build the image.
 
-`-rm`: will remove the container after execution
+`-rm`: will remove the container after execution.
+
+`-d`: With some containers the command line appears to freeze after pulling and starting the container. This might be because that particular container is now running in the current terminal, blocking the input. You can observe this with `docker container ls` from another terminal. In this situation one can exit by pressing control + c and try again with the `-d` flag. he -d flag starts a container detached, meaning that it runs in the background. 
+
 
 ### `start`
 

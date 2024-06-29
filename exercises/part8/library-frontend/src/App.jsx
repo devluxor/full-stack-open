@@ -37,7 +37,7 @@ const App = () => {
           <Route path='/books'    element={< Books/>}/>
           <Route path='/recommendations'    element={< Recommendations/>}/>
           <Route path='/new_book' element={< NewBook/>}/>
-          <Route path='/'         element={< Books/>}/>
+          <Route path='/' element={<Navigate replace to='/books'/>}/> 
       </Routes>
     </div>
   )
