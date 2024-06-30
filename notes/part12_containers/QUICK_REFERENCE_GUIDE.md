@@ -59,6 +59,9 @@
 |`docker container rm <container>`|Removes a container|`docker rm`|
 |`docker container stop <container>`|Stops a container|`docker stop`|
 |`docker container exec <container>`|Executes a command inside the container|`docker exec`|
+|`docker container exec <container>`|Executes a command inside the container|`docker exec`|
+|`docker stop $(docker ps -a -q)`|Stops ALL containers||
+|`docker rm $(docker ps -a -q)`|Removes ALL containers||
 
 ### `run` (aka `container run`)
 
