@@ -62,6 +62,7 @@
 |`docker container exec <container>`|Executes a command inside the container|`docker exec`|
 |`docker stop $(docker ps -a -q)`|Stops ALL containers||
 |`docker rm $(docker ps -a -q)`|Removes ALL containers||
+|`docker rmi -f $(docker images -aq)`|Removes ALL images||
 |`docker volume rm $(docker volume ls -q --filter dangling=true)`|Removes ALL volumes||
 
 ### `run` (aka `container run`)
